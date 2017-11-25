@@ -54,28 +54,28 @@ fn handle_help(chat_id: i64, telegram: &TelegramApi) -> Result<()> {
         Returns the current ETH/BTC rate\n\
         \n\
         \n\
-        Available coins:\n
-        /btc - Bitcoin\n\
-        /ltc - Litecoin\n\
-        /eth - Ethereum\n\
-        /etc - Ethereum Classic\n\
-        /zec - ZCash\n\
-        /xmr - Monero\n\
-        /das - Dash\n\
-        /xrp - Ripple\n\
-        /iot - Iota\n\
-        /eos - EOS\n\
-        /san - Santiment\n\
-        /omg - OmiseGO\n\
-        /bch - Bcash\n\
-        /neo - NEO\n\
-        /etp - ETP\n\
-        /qtu - Qtum\n\
-        /avt - Aventus\n\
-        /edo - Eidoo\n\
-        /btg - BTG\n\
-        /dat - Streamr\n\
-        /rrt - Recovery Right Tokens\n\
+        Available coins:\n\
+        /btc\tBitcoin\n\
+        /ltc\tLitecoin\n\
+        /eth\tEthereum\n\
+        /etc\tEthereum Classic\n\
+        /zec\tZCash\n\
+        /xmr\tMonero\n\
+        /das\tDash\n\
+        /xrp\tRipple\n\
+        /iot\tIota\n\
+        /eos\tEOS\n\
+        /san\tSantiment\n\
+        /omg\tOmiseGO\n\
+        /bch\tBcash\n\
+        /neo\tNEO\n\
+        /etp\tETP\n\
+        /qtu\tQtum\n\
+        /avt\tAventus\n\
+        /edo\tEidoo\n\
+        /btg\tBTG\n\
+        /dat\tStreamr\n\
+        /rrt\tRecovery Right Tokens\n\
         \n\
         Please tell @Kekmeister if you wish any additional features.\
     ")?;
