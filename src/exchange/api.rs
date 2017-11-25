@@ -15,7 +15,6 @@ impl Api {
     pub fn ticker(&self, pair: (&str, &str)) -> Result<TradingTicker> {
         let pair = format!("{}{}", pair.0, pair.1);
         let endpoint = format!("ticker/t{}", pair.to_uppercase());
-        println!("{}", endpoint);
         let response: Vec<f32> = self.make_request(&endpoint).send()?.json()?;
         parse_ticker(&response)
     }
