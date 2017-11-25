@@ -1,6 +1,15 @@
 [package]
+authors = ["Jan Nils Ferner <jn_ferner@hotmail.de>"]
 name = "rich-uncle-pennybags-bot"
 version = "0.1.0"
-authors = ["Jan Nils Ferner <jn_ferner@hotmail.de>"]
-
 [dependencies]
+dotenv = "0.10.1"
+dotenv_macros = "0.10.0"
+reqwest = "0.8.1"
+rocket = "0.3.3"
+rocket_codegen = "0.3.3"
+
+[dependencies.rocket_contrib]
+default-features = false
+features = ["json"]
+version = "0.3.3"

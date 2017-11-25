@@ -1,5 +1,6 @@
 #![feature(plugin)]
 #![plugin(rocket_codegen)]
+#![plugin(dotenv_macros)]
 
 extern crate dotenv;
 extern crate rocket;
@@ -11,5 +12,6 @@ fn index() -> &'static str {
 
 fn main() {
     dotenv::dotenv().ok();
+    println!("{}", &dotenv!("TOKEN"));
     rocket::ignite().mount("/", routes![index]).launch();
 }
