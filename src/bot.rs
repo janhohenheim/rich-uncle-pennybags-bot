@@ -52,10 +52,17 @@ fn handle_pair(coins: (&str, &str), chat_id: i64, telegram: &TelegramApi, exchan
     let ticker = exchange.ticker(coins)?;
     let exchange_name = format!("*{}*", exchange.exchange_name());
     
+    let last_price =  ticker.last_trade_price;
+    let mut price_amount = format!("{:.*}", 2, last_price);
+    if price_amount == "0.00" {
+        price_amount = format!("{:.*}", 6, last_price);
+    }
     let price = format!(
-        "{:.*} {}/{}", 
-        2, ticker.last_trade_price, 
-        coins.0.to_uppercase(), coins.1.to_uppercase());
+        "{} {}/{}", 
+        price_amount, 
+        coins.0.to_uppercase(), 
+        coins.1.to_uppercase()
+    );
 
     let percentage = ticker.daily_change_percentage;
     let emoji = get_development_emoji(percentage);
