@@ -15,3 +15,12 @@ pub struct Message {
 pub struct Chat {
     pub id: i32,
 }
+
+
+#[derive(Deserialize)]
+pub struct Response<T> {
+    pub ok: bool,
+    pub error_code: Option<i32>,
+    pub description: Option<String>,
+    pub result: T,
+}

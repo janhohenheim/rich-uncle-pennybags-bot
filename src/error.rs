@@ -2,13 +2,14 @@ use super::rocket::error::LaunchError;
 
 use std::result;
 use telegram::error::Error as TelegramError;
+use exchange::error::Error as ExchangeError;
 
 pub type Result<T> = result::Result<T, Error>;
 
 #[derive(Debug)]
 pub enum Error {
     Telegram(TelegramError),
-    Exchange(TelegramError),
+    Exchange(ExchangeError),
     Bot(LaunchError),
 }
 
@@ -53,5 +54,11 @@ impl From<LaunchError> for Error {
 impl From<TelegramError> for Error {
     fn from(err: TelegramError) -> Error {
         Error::Telegram(err)
+    }
+}
+
+impl From<ExchangeError> for Error {
+    fn from(err: ExchangeError) -> Error {
+        Error::Exchange(err)
     }
 }

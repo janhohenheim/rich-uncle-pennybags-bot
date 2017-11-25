@@ -14,16 +14,15 @@ impl Api {
             client: reqwest::Client::new(),
         }
     }
-    pub fn send_message(&self, chat_id: i32, text: &str) -> Result<Message> {
-        let msg: Message = self.make_request("sendMessage")
+    pub fn send_message(&self, chat_id: i32, text: &str) -> Result<Response<Message>> {
+        Ok(self.make_request("sendMessage")
             .form(&[
                 ["chat_id", &chat_id.to_string()],
                 ["text", text],
                 ["disable_notification", "true"],
             ])
             .send()?
-            .json()?;
-        Ok(msg)
+            .json()?)
     }
     fn make_request(&self, method: &str) -> reqwest::RequestBuilder {
         let url = format!("{}{}", self.api_url, method);
