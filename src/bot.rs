@@ -14,8 +14,7 @@ fn receive_update(
     if let Some(ref message) = update.message {
         if let Some(ref text) = telegram.extract_text(&message) {
             if text.starts_with('/') {
-                let text = text[1..].to_uppercase();
-                let mut coins = split_coins(&text);
+                let mut coins = split_coins(&text[1..]);
                 if coins.len() == 1 {
                     coins.push("usd");
                 }
@@ -56,7 +55,7 @@ fn handle_pair(coins: (&str, &str), chat_id: i64, telegram: &TelegramApi, exchan
     let price = format!(
         "{:.*} {}/{}", 
         2, ticker.last_trade_price, 
-        coins.0, coins.1);
+        coins.0.to_uppercase(), coins.1.to_uppercase());
 
     let percentage = ticker.daily_change_percentage;
     let emoji = get_development_emoji(percentage);
