@@ -9,7 +9,7 @@ pub struct Update {
 pub struct Message {
     pub message_id: i64,
     pub chat: Chat,
-    pub text: String,
+    pub text: Option<String>,
 }
 
 #[derive(Deserialize)]

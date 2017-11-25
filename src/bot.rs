@@ -11,52 +11,70 @@ fn receive_update(
     telegram: State<TelegramApi>,
     exchange: State<ExchangeApi>,
 ) -> Result<()> {
-    // Todo: Completely rewrite this shit method
-    let post = if let Some(ref post) = update.message {
-        post
-    } else if let Some(ref post) = update.channel_post {
-        post
-    } else {
-        panic!();
-    };
-    let msg = &post.text.to_lowercase();
-    let id = post.chat.id;
-
-    let usd = |coin: &str| -> Result<()> {
-        if msg == &format!("/{}", coin) 
-        || msg == &format!("/{}usd", coin)
-        || msg == &format!("/usd{}", coin) 
-        || msg == &format!("/{}@RichUnclePennybagsBot", coin)
-        || msg == &format!("/{}usd@RichUnclePennybagsBot", coin) 
-        || msg == &format!("/usd{}@RichUnclePennybagsBot", coin){
-            let pair = format!("{}usd", coin);
-            let ticker = exchange.ticker(&pair)?;
-            let name = exchange.exchange_name();
-            let percentage = ticker.daily_change_percentage;
-            let emoji = 
-            if percentage.is_sign_positive() {
-                "📈 +"
-            } else {
-                "📉 "
-            };
-            let msg = format!(
-                "*{}*\n{:.*} USD/{}\n{}{}% in the last 24h",
-                name,
-                2,
-                ticker.last_trade_price,
-                coin.to_uppercase(),
-                emoji,
-                percentage * 100.0,
-            );
-            telegram.send_message(id, &msg)?;
+    if let Some(ref message) = update.message {
+        if let Some(ref text) = telegram.extract_text(&message) {
+            if text.starts_with('/') {
+                let mut coins = split_coins(&text[1..]);
+                if coins.len() == 1 {
+                    coins.push("usd");
+                }
+                if coins.len() == 2 {
+                    let pair = (coins[0], coins[1]);
+                    let id = message.chat.id;
+                    // try both combinations
+                    if handle_pair(pair, id, &telegram, &exchange).is_err() {
+                        let inverse = (pair.1, pair.0);
+                        if handle_pair(inverse, id, &telegram, &exchange).is_err() {
+                            println!("Failed to answer to message: {}", text);
+                        }
+                    }
+                }
+            }
         }
-        Ok(())
-    };
-    usd("eth")?;
-    usd("iot")?;
-    usd("btc")?;
-    usd("omg")?;
+    }
+
     Ok(())
+}
+
+fn split_coins<'a>(text: &'a str) -> Vec<&'a str> {
+    const COIN_LEN: usize = 3;
+    if text.len() <= COIN_LEN {
+        vec![text]
+    } else {
+        let (a, b) = text.split_at(COIN_LEN);
+        let mut coins = split_coins(b);
+        coins.push(a);
+        coins
+    }
+}
+
+fn handle_pair(coins: (&str, &str), chat_id: i64, telegram: &TelegramApi, exchange: &ExchangeApi) -> Result<()> {
+    let ticker = exchange.ticker(coins)?;
+    let exchange_name = format!("*{}*", exchange.exchange_name());
+    
+    let price = format!(
+        "{:.*} {}/{}", 
+        2, ticker.last_trade_price, 
+        coins.0, coins.1);
+
+    let percentage = ticker.daily_change_percentage;
+    let emoji = get_development_emoji(percentage);
+    let development = format!(
+        "{}{:.*}% in the last 24h",
+         emoji, 
+         2, percentage * 100.0);
+
+    let msg = format!("{}\n{}\n{}", exchange_name, price, development);
+    telegram.send_message(chat_id, &msg)?;
+    Ok(())
+}
+
+fn get_development_emoji(percentage: f32) -> &'static str {
+    if percentage.is_sign_positive() {
+        "📈 +"
+    } else {
+        "📉 "
+    }
 }
 
 pub struct RichUnclePennybagsBot {
@@ -64,9 +82,9 @@ pub struct RichUnclePennybagsBot {
     exchange: ExchangeApi,
 }
 impl RichUnclePennybagsBot {
-    pub fn new(token: &str) -> Self {
+    pub fn new(token: &str, username: &str) -> Self {
         RichUnclePennybagsBot {
-            telegram: TelegramApi::new(token),
+            telegram: TelegramApi::new(token, username),
             exchange: ExchangeApi::new(),
         }
     }
