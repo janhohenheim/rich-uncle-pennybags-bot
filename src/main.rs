@@ -5,6 +5,8 @@
 extern crate dotenv;
 extern crate rocket;
 
+use std::io::Read;
+
 #[get("/")]
 fn index() -> &'static str {
     "Hello, world!"
