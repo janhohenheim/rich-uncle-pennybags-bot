@@ -14,7 +14,8 @@ fn receive_update(
     if let Some(ref message) = update.message {
         if let Some(ref text) = telegram.extract_text(&message) {
             if text.starts_with('/') {
-                let mut coins = split_coins(&text[1..]);
+                let text = text[1..].to_uppercase();
+                let mut coins = split_coins(&text);
                 if coins.len() == 1 {
                     coins.push("usd");
                 }
