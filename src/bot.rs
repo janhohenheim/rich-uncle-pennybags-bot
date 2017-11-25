@@ -44,15 +44,10 @@ fn receive_update(
 
 fn handle_help(chat_id: i64, telegram: &TelegramApi) -> Result<()> {
     telegram.send_message(chat_id, "\
-        Usage: Simply use /<coinpair>. If you only specify one coin, it assumes you want it in USD. Examples:\n\
+        Simply use /<coinpair>. If you only specify one coin, it assumes you want it in USD. Examples:\n\
         \n\
-        \n\
-        /eth\n\
-        Returns the current ETH/USD rate\n\
-        \n\
-        /ethbtc\n\
-        Returns the current ETH/BTC rate\n\
-        \n\
+        /eth Returns the current ETH/USD rate\n\
+        /ethbtc Returns the current ETH/BTC rate\n\
         \n\
         Available coins:\n\
         /btc\tBitcoin\n\
