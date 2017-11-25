@@ -8,6 +8,9 @@ dotenv_macros = "0.10.0"
 reqwest = "0.8.1"
 rocket = "0.3.3"
 rocket_codegen = "0.3.3"
+serde = "1.0.21"
+serde_derive = "1.0.21"
+serde_json = "1.0.6"
 
 [dependencies.rocket_contrib]
 default-features = false

@@ -1,1 +1,1 @@
-pub struct Exchange {}
+pub struct ExchangeApi {}

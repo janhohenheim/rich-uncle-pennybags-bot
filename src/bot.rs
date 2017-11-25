@@ -1,25 +1,32 @@
-use super::rocket;
+use super::rocket::{self, State};
+use super::rocket_contrib::Json;
 use error::*;
-use telegram::*;
+use telegram::Api as TelegramApi;
+use telegram::types::*;
 use exchange::*;
 
-#[get("/")]
-fn index() -> &'static str {
-    "Hello, world! :>"
+#[post("/", data = "<update>")]
+fn receive_update(update: Json<Update>, telegram: State<TelegramApi>) -> Result<String> {
+    telegram.send_message(update.message.chat.id, &update.message.text)?;
+    Ok("Ok".to_string())
 }
-
-pub struct RichUnclePennybagsBot<'a> {
-    _telegram: Telegram<'a>,
-    _exchange: Exchange,
+pub struct RichUnclePennybagsBot {
+    telegram: TelegramApi,
+    exchange: ExchangeApi,
 }
-impl<'a> RichUnclePennybagsBot<'a> {
-    pub fn new(token: &'a str) -> Self {
+impl RichUnclePennybagsBot {
+    pub fn new(token: &str) -> Self {
         RichUnclePennybagsBot {
-            _telegram: Telegram::new(token),
-            _exchange: Exchange {},
+            telegram: TelegramApi::new(token),
+            exchange: ExchangeApi {},
         }
     }
     pub fn start(self) -> Error {
-        rocket::ignite().mount("/", routes![index]).launch().into()
+        rocket::ignite()
+            .manage(self.telegram)
+            .manage(self.exchange)
+            .mount("/", routes![receive_update])
+            .launch()
+            .into()
     }
 }

@@ -7,7 +7,7 @@ use rich_uncle_pennybags_bot::RichUnclePennybagsBot;
 
 fn main() {
     dotenv::dotenv().ok();
-    let token = dotenv!("TOKEN");
+    let token = dotenv!("TELEGRAM_TOKEN");
     let error = RichUnclePennybagsBot::new(token).start();
     println!("Failed to launch: {}", &error);
 }
