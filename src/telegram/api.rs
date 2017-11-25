@@ -14,7 +14,7 @@ impl Api {
             client: reqwest::Client::new(),
         }
     }
-    pub fn send_message(&self, chat_id: i32, text: &str) -> Result<Response<Message>> {
+    pub fn send_message(&self, chat_id: i64, text: &str) -> Result<Response<Message>> {
         Ok(self.make_request("sendMessage")
             .form(&[
                 ["chat_id", &chat_id.to_string()],

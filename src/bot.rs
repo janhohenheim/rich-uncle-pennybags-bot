@@ -11,11 +11,24 @@ fn receive_update(
     telegram: State<TelegramApi>,
     exchange: State<ExchangeApi>,
 ) -> Result<()> {
-    let msg = &update.message.text.to_lowercase();
-    let id = update.message.chat.id;
+    // Todo: Completely rewrite this shit method
+    let post = if let Some(ref post) = update.message {
+        post
+    } else if let Some(ref post) = update.channel_post {
+        post
+    } else {
+        panic!();
+    };
+    let msg = &post.text.to_lowercase();
+    let id = post.chat.id;
 
     let usd = |coin: &str| -> Result<()> {
-        if msg == &format!("/{}", coin) {
+        if msg == &format!("/{}", coin) 
+        || msg == &format!("/{}usd", coin)
+        || msg == &format!("/usd{}", coin) 
+        || msg == &format!("/{}@RichUnclePennybagsBot", coin)
+        || msg == &format!("/{}usd@RichUnclePennybagsBot", coin) 
+        || msg == &format!("/usd{}@RichUnclePennybagsBot", coin){
             let pair = format!("{}usd", coin);
             let ticker = exchange.ticker(&pair)?;
             let name = exchange.exchange_name();
