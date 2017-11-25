@@ -14,25 +14,45 @@ fn receive_update(
     if let Some(ref message) = update.message {
         if let Some(ref text) = telegram.extract_text(&message) {
             if text.starts_with('/') {
-                let mut coins = split_coins(&text[1..]);
-                if coins.len() == 1 {
-                    coins.push("usd");
-                }
-                if coins.len() == 2 {
-                    let pair = (coins[0], coins[1]);
-                    let id = message.chat.id;
-                    // try both combinations
-                    if handle_pair(pair, id, &telegram, &exchange).is_err() {
-                        let inverse = (pair.1, pair.0);
-                        if handle_pair(inverse, id, &telegram, &exchange).is_err() {
-                            println!("Failed to answer to message: {}", text);
+                let text = &text[1..];
+                let chat_id = message.chat.id;
+                if text == "help" {
+                    if handle_help(chat_id, &telegram).is_err() {
+                        println!("Failed to send help");
+                    }
+                } else {
+                    let mut coins = split_coins(&text);
+                    if coins.len() == 1 {
+                        coins.push("usd");
+                    }
+                    if coins.len() == 2 {
+                        let pair = (coins[0], coins[1]);
+                        // try both combinations
+                        if handle_pair(pair, chat_id, &telegram, &exchange).is_err() {
+                            let inverse = (pair.1, pair.0);
+                            if handle_pair(inverse, chat_id, &telegram, &exchange).is_err() {
+                                println!("Failed to answer to message: {}", text);
+                            }
                         }
                     }
                 }
             }
         }
     }
+    Ok(())
+}
 
+fn handle_help(chat_id: i64, telegram: &TelegramApi) -> Result<()> {
+    telegram.send_message(chat_id, "\
+        Usage: Simply use /<coinpair>. If you only specify one coin, it assumes you want it in USD. Examples:\n\
+        \n\
+        /eth\n\
+        Returns the current ETH/USD rate\n\
+        /ethbtc\n\
+        Returns the current ETH/BTC rate\n\
+        \n\
+        Please tell me if you wish any additional features.\
+    ")?;
     Ok(())
 }
 
