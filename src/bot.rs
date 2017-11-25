@@ -77,7 +77,7 @@ fn handle_help(chat_id: i64, telegram: &TelegramApi) -> Result<()> {
         /dat - Streamr\n\
         /rrt - Recovery Right Tokens\n\
         \n\
-        Please tell me if you wish any additional features.\
+        Please tell @Kekmeister if you wish any additional features.\
     ")?;
     Ok(())
 }
