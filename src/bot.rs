@@ -18,7 +18,23 @@ fn receive_update(
         if msg == &format!("/{}", coin) {
             let pair = format!("{}usd", coin);
             let ticker = exchange.ticker(&pair)?;
-            let msg = format!("{:.*}$", 2, ticker.last_trade_price);
+            let name = exchange.exchange_name();
+            let percentage = ticker.daily_change_percentage;
+            let emoji = 
+            if percentage.is_sign_positive() {
+                "📈 +"
+            } else {
+                "📉 "
+            };
+            let msg = format!(
+                "*{}*\n{:.*} USD/{}\n{}{}% in the last 24h",
+                name,
+                2,
+                ticker.last_trade_price,
+                coin.to_uppercase(),
+                emoji,
+                percentage * 100.0,
+            );
             telegram.send_message(id, &msg)?;
         }
         Ok(())

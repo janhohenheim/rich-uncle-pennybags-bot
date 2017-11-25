@@ -20,6 +20,7 @@ impl Api {
                 ["chat_id", &chat_id.to_string()],
                 ["text", text],
                 ["disable_notification", "true"],
+                ["parse_mode", "Markdown"],
             ])
             .send()?
             .json()?)

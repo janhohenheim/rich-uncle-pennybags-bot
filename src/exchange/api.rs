@@ -17,6 +17,11 @@ impl Api {
         let response: Vec<f32> = self.make_request(&endpoint).send()?.json()?;
         parse_ticker(&response)
     }
+
+    pub fn exchange_name(&self) -> String {
+        "Bitfinex 🍃".into()
+    }
+
     fn make_request(&self, endpoint: &str) -> reqwest::RequestBuilder {
         const API_URL_PREFIX: &str = "https://api.bitfinex.com/v2/";
         let url = format!("{}{}", API_URL_PREFIX, endpoint);
