@@ -3,7 +3,7 @@
 
 A crypto ticker bot fetching the Bitfinex API.
 
-Usage: Use /<coinpair>. If you only specify one coin, it assumes you want it in USD. Examples:
+Usage: Use `/<coinpair>`. If you only specify one coin, it assumes you want it in USD. Examples:
 
 /eth  
 Returns the current ETH/USD rate  
