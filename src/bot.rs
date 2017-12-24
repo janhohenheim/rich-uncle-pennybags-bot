@@ -1,15 +1,21 @@
 use super::rocket::{self, State};
 use super::rocket_contrib::Json;
-use error::*;
 use telegram::Api as TelegramApi;
 use telegram::types::*;
 use exchange::Api as ExchangeApi;
+use exchange::implementation::Bitfinex;
+use exchange::Coin;
+use error::*;
+
+
+type Exchanges = Vec<Box<ExchangeApi + Send + Sync>>;
+type Exchange = Box<ExchangeApi + Send + Sync>;
 
 #[post("/", data = "<update>")]
-fn receive_update(
+fn receive_update (
     update: Json<Update>,
     telegram: State<TelegramApi>,
-    exchange: State<ExchangeApi>,
+    exchanges: State<Exchanges>,
 ) -> Result<()> {
     if let Some(ref message) = update.message {
         if let Some(ref text) = telegram.extract_text(&message) {
@@ -26,12 +32,14 @@ fn receive_update(
                         coins.push("usd");
                     }
                     if coins.len() == 2 {
-                        let pair = (coins[0], coins[1]);
-                        // try both combinations
-                        if handle_pair(pair, chat_id, &telegram, &exchange).is_err() {
-                            let inverse = (pair.1, pair.0);
-                            if handle_pair(inverse, chat_id, &telegram, &exchange).is_err() {
-                                println!("Failed to answer to message: {}", text);
+                        for exchange in exchanges.iter() {
+                            let pair = (coins[0], coins[1]);
+                            // try both combinations
+                            if handle_pair(pair, chat_id, &telegram, exchange).is_err() {
+                                let inverse = (pair.1, pair.0);
+                                if handle_pair(inverse, chat_id, &telegram, exchange).is_err() {
+                                    println!("Failed to answer to message: {}", text);
+                                }
                             }
                         }
                     }
@@ -40,6 +48,18 @@ fn receive_update(
         }
     }
     Ok(())
+}
+
+fn parse_coins(symbols: (&str, &str)) -> Result<(Coin, Coin)> {
+    Ok((parse_coin(symbols.0)?, parse_coin(symbols.1)?))
+}
+
+fn parse_coin(symbol: &str) -> Result<Coin> {
+    match symbol {
+        "btc" => Ok(Coin::Bitcoin),
+        "eth" => Ok(Coin::Ethereum),
+        _ => Err(Error::Parse(symbol.to_string())),
+    }
 }
 
 fn handle_help(chat_id: i64, telegram: &TelegramApi) -> Result<()> {
@@ -89,8 +109,9 @@ fn split_coins<'a>(text: &'a str) -> Vec<&'a str> {
     }
 }
 
-fn handle_pair(coins: (&str, &str), chat_id: i64, telegram: &TelegramApi, exchange: &ExchangeApi) -> Result<()> {
-    let ticker = exchange.ticker(coins)?;
+fn handle_pair(coins: (&str, &str), chat_id: i64, telegram: &TelegramApi, exchange: &Exchange) -> Result<()> {
+    let pair = parse_coins(coins)?;
+    let ticker = exchange.ticker(pair)?;
     let exchange_name = format!("*{}*", exchange.exchange_name());
     
     let last_price =  ticker.last_trade_price;
@@ -127,19 +148,19 @@ fn get_development_emoji(percentage: f32) -> &'static str {
 
 pub struct RichUnclePennybagsBot {
     telegram: TelegramApi,
-    exchange: ExchangeApi,
+    exchanges: Exchanges,
 }
 impl RichUnclePennybagsBot {
     pub fn new(token: &str, username: &str) -> Self {
         RichUnclePennybagsBot {
             telegram: TelegramApi::new(token, username),
-            exchange: ExchangeApi::new(),
+            exchanges: vec![Box::new(Bitfinex::new())],
         }
     }
     pub fn start(self) -> Error {
         rocket::ignite()
             .manage(self.telegram)
-            .manage(self.exchange)
+            .manage(self.exchanges)
             .mount("/", routes![receive_update])
             .launch()
             .into()

@@ -1,5 +1,5 @@
 pub mod api;
-pub use self::api::Api;
+pub use self::api::*;
 
+pub mod implementation;
 pub mod error;
-pub mod types;

@@ -10,7 +10,8 @@ pub type Result<T> = result::Result<T, Error>;
 pub enum Error {
     Telegram(TelegramError),
     Exchange(ExchangeError),
-    Bot(LaunchError),
+    Server(LaunchError),
+    Parse(String),
 }
 
 use std::fmt;
@@ -19,7 +20,10 @@ impl fmt::Display for Error {
         match *self {
             Error::Telegram(ref err) => err.fmt(f),
             Error::Exchange(ref err) => err.fmt(f),
-            Error::Bot(ref err) => err.fmt(f),
+            Error::Server(ref err) => err.fmt(f),
+            Error::Parse(ref err) => {
+                write!(f, "Couldn't match symbol '{}' with any supported coin", err)
+            }
         }
     }
 }
@@ -30,7 +34,8 @@ impl StdError for Error {
         match *self {
             Error::Telegram(ref err) => err.description(),
             Error::Exchange(ref err) => err.description(),
-            Error::Bot(ref err) => err.description(),
+            Error::Server(ref err) => err.description(),
+            Error::Parse(_) => "Failed to parse coin",
         }
     }
 
@@ -38,7 +43,8 @@ impl StdError for Error {
         match *self {
             Error::Telegram(ref err) => Some(err),
             Error::Exchange(ref err) => Some(err),
-            Error::Bot(ref err) => Some(err),
+            Error::Server(ref err) => Some(err),
+            Error::Parse(_) => None,
         }
     }
 }
@@ -46,7 +52,7 @@ impl StdError for Error {
 
 impl From<LaunchError> for Error {
     fn from(err: LaunchError) -> Error {
-        Error::Bot(err)
+        Error::Server(err)
     }
 }
 
