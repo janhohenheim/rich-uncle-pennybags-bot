@@ -133,7 +133,7 @@ fn handle_pair(coins: (&str, &str), chat_id: i64, telegram: &TelegramApi, exchan
     let development = format!(
         "{}{:.*}% in the last 24h",
          emoji, 
-         2, percentage * 100.0);
+         2, percentage);
 
     let msg = format!("{}\n{}\n{}", exchange_name, price, development);
     telegram.send_message(chat_id, &msg)?;

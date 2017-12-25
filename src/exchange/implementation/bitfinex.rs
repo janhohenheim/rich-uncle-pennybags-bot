@@ -52,7 +52,7 @@ fn parse_ticker(v: &[f32]) -> Result<TradingTicker> {
         Err(Error::DeserializationError)
     } else {
         Ok(TradingTicker {
-            daily_change_percentage: v[5],
+            daily_change_percentage: v[5] * 100.0,
             last_trade_price: v[6],
         })
     }
