@@ -17,7 +17,7 @@ type Exchange = Box<ExchangeApi + Send + Sync>;
 pub struct RichUnclePennybagsBot {
     telegram: TelegramApi,
     exchanges: Exchanges,
-    coins: Vec<Coin>,
+    //coins: Vec<Coin>,
 }
 impl RichUnclePennybagsBot {
     pub fn new(token: &str, username: &str, coinfile: &str) -> Self {
@@ -27,7 +27,7 @@ impl RichUnclePennybagsBot {
                 Box::new(Bitfinex::new()),
                 Box::new(CoinMarketCap::new()),
             ],
-            coins: parse_coins(coinfile)
+            //coins: parse_coins(coinfile)
         }
     }
     pub fn start(self) -> Error {
