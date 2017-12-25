@@ -4,7 +4,7 @@
 #[short_name.exchanges]
 #bitfinex = "The name used for access on the Bitfinex API. Default: [short_name] in CAPSLOCK"
 #coinmarketcap = "The name used for access on the CoinMarketCap API. Default: name in kebab-case"
-# This can be expanded into
+# This can be expanded into:
 #[eth.exchange.coinmarketcap]
 #id = "The name used for access on the CoinMarketCap API. Default: [short_name.name] in kebab-case"
 #conversion_symbol = "The symbol used for access on the CoinMarketCap API. Default: [short_name] in lowercase"
