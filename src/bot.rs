@@ -34,7 +34,7 @@ impl RichUnclePennybagsBot {
         rocket::ignite()
             .manage(self.telegram)
             .manage(self.exchanges)
-            .manage(self.coins)
+            //.manage(self.coins)
             .mount("/", routes![routes::receive_update])
             .launch()
             .into()
