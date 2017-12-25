@@ -60,6 +60,8 @@ fn parse_coin(symbol: &str) -> Result<Coin> {
         "btc" => Ok(Coin::Bitcoin),
         "eth" => Ok(Coin::Ethereum),
         "iot" => Ok(Coin::Iota),
+
+        "req" => Ok(Coin::RequestNetwork),
         _ => Err(Error::Parse(symbol.to_string())),
     }
 }

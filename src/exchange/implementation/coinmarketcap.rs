@@ -49,6 +49,8 @@ impl CoinMarketCap {
             Coin::Bitcoin => "bitcoin",
             Coin::Ethereum => "ethereum",
             Coin::Iota => "iota",
+
+            Coin::RequestNetwork => "request-network"
         }.to_string()
     }
 

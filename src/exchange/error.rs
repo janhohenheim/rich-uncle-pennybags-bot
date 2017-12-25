@@ -1,6 +1,7 @@
 use super::super::reqwest::Error as RequestError;
 extern crate serde_json;
 use self::serde_json::error::Error as SerdeError;
+use exchange::Coin;
 
 use std::result;
 pub type Result<T> = result::Result<T, Error>;
@@ -10,6 +11,7 @@ pub enum Error {
     DeserializationError,
     SerdeError(SerdeError),
     RequestError(RequestError),
+    CoinNotSupported(Coin),
 }
 
 use std::fmt;
@@ -20,6 +22,9 @@ impl fmt::Display for Error {
             Error::SerdeError(ref err) => err.fmt(f),
             Error::DeserializationError => {
                 write!(f, "Failed to deserialize object returned from exchange")
+            }
+            Error::CoinNotSupported(ref coin) => {
+                write!(f, "An exchange doesn't support the coin {:?}", coin)
             }
         }
     }
@@ -32,6 +37,7 @@ impl StdError for Error {
             Error::RequestError(ref err) => err.description(),
             Error::SerdeError(ref err) => err.description(),
             Error::DeserializationError => "Failed to deserialize",
+            Error::CoinNotSupported(_) => "Coin is not supported",
         }
     }
 
@@ -40,6 +46,7 @@ impl StdError for Error {
             Error::RequestError(ref err) => Some(err),
             Error::SerdeError(ref err) => Some(err),
             Error::DeserializationError => None,
+            Error::CoinNotSupported(_) => None,
         }
     }
 }
