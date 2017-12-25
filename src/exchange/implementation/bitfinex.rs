@@ -36,6 +36,7 @@ impl Bitfinex {
             Coin::USDollar => "usd",
             Coin::Bitcoin => "btc",
             Coin::Ethereum => "eth",
+            Coin::Iota => "iot",
         }.to_string()
     }
 

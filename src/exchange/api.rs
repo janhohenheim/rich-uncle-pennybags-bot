@@ -9,9 +9,10 @@ pub trait Api {
 }
 
 pub enum Coin {
+    USDollar,
     Bitcoin,
     Ethereum,
-    USDollar,
+    Iota,
 }
 
 pub struct TradingTicker {
