@@ -1,15 +1,18 @@
 #!/bin/bash
 
+echo  -e "\033[33;36m Updating source... \033[0m" &&
+ssh jnf "(cd rich-uncle-pennybags-bot && git pull)"
+
 echo  -e "\033[33;36m Building release binaries... \033[0m" &&
-cargo build --release &&
+ssh jnf "(cd rich-uncle-pennybags-bot && /root/.cargo/bin/cargo build --release)" &&
 
 echo  -e "\033[33;36m Stopping services... \033[0m" &&
 ssh jnf service rich-uncle-pennybags-bot stop &&
 
-LOCATION=jnf:/opt/rich-uncle-pennybags-bot &&
+LOCATION=/opt/rich-uncle-pennybags-bot &&
 echo  -e "\033[33;36m Copying files to $LOCATION... \033[0m" &&
-scp target/release/rich-uncle-pennybags-bot $LOCATION &&
-scp .env $LOCATION &&
+ssh jnf cp rich-uncle-pennybags-bot/target/release/rich-uncle-pennybags-bot $LOCATION &&
+scp .env jnf:$LOCATION &&
 
 echo  -e "\033[33;36m Starting services... \033[0m" &&
 ssh jnf service rich-uncle-pennybags-bot start &&
