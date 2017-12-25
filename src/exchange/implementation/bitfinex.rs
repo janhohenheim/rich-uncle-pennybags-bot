@@ -52,16 +52,8 @@ fn parse_ticker(v: &[f32]) -> Result<TradingTicker> {
         Err(Error::DeserializationError)
     } else {
         Ok(TradingTicker {
-            last_highest_bid_price: v[0],
-            last_hightest_bid_size: v[1],
-            last_lowest_ask_price: v[2],
-            last_lowest_ask_size: v[3],
-            daily_change: v[4],
             daily_change_percentage: v[5],
             last_trade_price: v[6],
-            daily_volume: v[7],
-            daily_high: v[8],
-            daily_low: v[9],
         })
     }
 }

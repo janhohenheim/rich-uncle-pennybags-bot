@@ -3,7 +3,7 @@ use super::rocket_contrib::Json;
 use telegram::Api as TelegramApi;
 use telegram::types::*;
 use exchange::Api as ExchangeApi;
-use exchange::implementation::Bitfinex;
+use exchange::implementation::*;
 use exchange::Coin;
 use error::*;
 
@@ -156,7 +156,10 @@ impl RichUnclePennybagsBot {
     pub fn new(token: &str, username: &str) -> Self {
         RichUnclePennybagsBot {
             telegram: TelegramApi::new(token, username),
-            exchanges: vec![Box::new(Bitfinex::new())],
+            exchanges: vec![
+                Box::new(Bitfinex::new()),
+                Box::new(CoinMarketCap::new()),
+            ],
         }
     }
     pub fn start(self) -> Error {
