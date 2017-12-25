@@ -24,6 +24,7 @@ impl Api for CoinMarketCap {
         let response = &response[0];
 
         let field = format!("price_{}", coins.1);
+        println!("resp: {:?}", response);
         let daily_change_percentage = response["percent_change_24h"]
             .as_f64()
             .ok_or(Error::DeserializationError)? as f32;
