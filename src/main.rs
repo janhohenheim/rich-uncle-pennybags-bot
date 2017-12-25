@@ -10,5 +10,5 @@ fn main() {
     let token = dotenv!("TELEGRAM_TOKEN");
     let username = dotenv!("TELEGRAM_USERNAME");
     let error = RichUnclePennybagsBot::new(token, username).start();
-    println!("Failed to launch: {}", &error);
+    println!("Failed to launch bot: {}", &error);
 }
