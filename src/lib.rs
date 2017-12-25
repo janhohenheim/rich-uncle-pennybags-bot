@@ -1,10 +1,12 @@
-#![feature(plugin)]
+#![feature(plugin, custom_attribute)]
+
 #![plugin(rocket_codegen)]
 extern crate reqwest;
 extern crate rocket;
 extern crate rocket_contrib;
 #[macro_use]
 extern crate serde_derive;
+extern crate serde;
 extern crate toml;
 
 mod exchange;
