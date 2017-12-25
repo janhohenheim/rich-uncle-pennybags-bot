@@ -34,7 +34,7 @@ impl Api for CoinMarketCap {
     }
 
     fn exchange_name(&self) -> String {
-        "CoinMarketCap $".into()
+        "💲 CoinMarketCap".into()
     }
 }
 

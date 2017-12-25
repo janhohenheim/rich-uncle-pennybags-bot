@@ -22,7 +22,7 @@ impl Api for Bitfinex {
     }
 
     fn exchange_name(&self) -> String {
-        "Bitfinex 🍃".into()
+        "🍃 Bitfinex".into()
     }
 }
 
