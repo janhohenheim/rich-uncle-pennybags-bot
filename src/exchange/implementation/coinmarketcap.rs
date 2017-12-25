@@ -23,14 +23,10 @@ impl Api for CoinMarketCap {
         let response: Value = serde_json::from_str(&response)?;
         let response = &response[0];
 
+        let daily_change_percentage = parse_field(&response["percent_change_24h"])?;
         let field = format!("price_{}", coins.1);
-        println!("resp: {:?}", response);
-        let daily_change_percentage = response["percent_change_24h"]
-            .as_f64()
-            .ok_or(Error::DeserializationError)? as f32;
-        let last_trade_price = response[&field]
-            .as_f64()
-            .ok_or(Error::DeserializationError)? as f32;
+        let last_trade_price = parse_field(&response[&field])?;
+
         Ok(TradingTicker {
             daily_change_percentage,
             last_trade_price,
@@ -63,3 +59,9 @@ impl CoinMarketCap {
     }
 }
 
+fn parse_field(val: &Value) -> Result<f32> {
+    val.as_str()
+        .ok_or(Error::DeserializationError)?
+        .parse::<f32>()
+        .map_err(|_| Error::DeserializationError)
+}
