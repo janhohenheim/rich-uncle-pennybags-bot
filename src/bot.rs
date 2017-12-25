@@ -37,8 +37,8 @@ fn receive_update (
                             // try both combinations
                             if handle_pair(pair, chat_id, &telegram, exchange).is_err() {
                                 let inverse = (pair.1, pair.0);
-                                if handle_pair(inverse, chat_id, &telegram, exchange).is_err() {
-                                    println!("Failed to answer to message: {}", text);
+                                if let Err(err) = handle_pair(inverse, chat_id, &telegram, exchange) {
+                                    println!("Failed to answer to message: {}, error: {:?}", text, err);
                                 }
                             }
                         }
@@ -56,6 +56,7 @@ fn parse_coins(symbols: (&str, &str)) -> Result<(Coin, Coin)> {
 
 fn parse_coin(symbol: &str) -> Result<Coin> {
     match symbol {
+        "usd" => Ok(Coin::USDollar),
         "btc" => Ok(Coin::Bitcoin),
         "eth" => Ok(Coin::Ethereum),
         _ => Err(Error::Parse(symbol.to_string())),

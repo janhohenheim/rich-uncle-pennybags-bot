@@ -33,6 +33,7 @@ impl Bitfinex {
 
     fn parse_coin(coin: Coin) -> String {
         match coin {
+            Coin::USDollar => "usd",
             Coin::Bitcoin => "btc",
             Coin::Ethereum => "eth",
         }.to_string()

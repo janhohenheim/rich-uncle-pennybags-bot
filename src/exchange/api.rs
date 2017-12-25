@@ -1,5 +1,3 @@
-use super::super::reqwest;
-
 use exchange::error::*;
 
 pub trait Api {
@@ -13,6 +11,7 @@ pub trait Api {
 pub enum Coin {
     Bitcoin,
     Ethereum,
+    USDollar,
 }
 
 pub struct TradingTicker {
