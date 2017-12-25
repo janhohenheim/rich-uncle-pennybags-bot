@@ -32,6 +32,9 @@ impl Api {
         match message.text {
             Some(ref text) => {
                 let mention = format!("@{}", self.username);
+                println!("mention: {}", mention);
+                println!("text: {}", text);
+                println!("trimmed: {}", text.trim_right_matches(&mention));
                 Some(text.trim_right_matches(&mention).to_string())
             }
             None => None,
