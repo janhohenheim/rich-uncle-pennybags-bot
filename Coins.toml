@@ -22,7 +22,12 @@ eth = "Ethereum"
 btc = "Bitcoin"
 req = "Request Network"
 iot = "Iota"
+edo = "eidoo"
 
 [coins.qash]
 long_name = "QASH"
 bitfinex = "QSH"
+
+[coins.edo]
+long_name = "eidoo"
+bitfinex = "EDO"
