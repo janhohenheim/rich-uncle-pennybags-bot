@@ -27,7 +27,3 @@ edo = "eidoo"
 [coins.qash]
 long_name = "QASH"
 bitfinex = "QSH"
-
-[coins.edo]
-long_name = "eidoo"
-bitfinex = "EDO"
