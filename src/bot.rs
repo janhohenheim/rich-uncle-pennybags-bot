@@ -5,8 +5,8 @@ use telegram::Api as TelegramApi;
 use exchange::Api as ExchangeApi;
 use exchange::implementation::*;
 use error::*;
-use model::*;
 use routes;
+use model::CoinFile;
 
 type Exchanges = Vec<Exchange>;
 type Exchange = Box<ExchangeApi + Send + Sync>;

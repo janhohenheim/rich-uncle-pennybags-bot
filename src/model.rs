@@ -3,32 +3,34 @@ use std::collections::HashMap;
 #[derive(Deserialize, Debug)]
 #[serde(deny_unknown_fields)]
 pub struct CoinFile {
-    pub coins: HashMap<String, CoinName>,
+    pub coins: HashMap<String, Coin>,
 }
 
 #[derive(Deserialize, Debug)]
-#[serde(untagged)]
-pub enum CoinName {
+#[serde(untagged, deny_unknown_fields)]
+pub enum Coin {
     Simple(String),
-    Detailed(DetailedCoinName),
+    Detailed(DetailedCoin),
 }
 
 #[derive(Deserialize, Debug)]
-pub struct DetailedCoinName {
+#[serde(deny_unknown_fields)]
+pub struct DetailedCoin {
     pub name: String,
     pub bitfinex: Option<String>,
-    pub coinmarketcap: Option<CoinMarketCapConf>,
+    pub coinmarketcap: Option<CoinMarketCap>,
 }
 
 #[derive(Deserialize, Debug)]
-#[serde(untagged)]
-pub enum CoinMarketCapConf {
+#[serde(untagged, deny_unknown_fields)]
+pub enum CoinMarketCap {
     Simple(String),
-    Detailed(DetailedCoinMarketCapConf),
+    Detailed(DetailedCoinMarketCap),
 }
 
 #[derive(Deserialize, Debug)]
-pub struct DetailedCoinMarketCapConf {
+#[serde(deny_unknown_fields)]
+pub struct DetailedCoinMarketCap {
     id: String,
     conversion_symbol: String,
 }
