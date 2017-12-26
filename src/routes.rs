@@ -90,6 +90,7 @@ Please tell @Kekmeister if you want any additional features.";
         msg.push_str(&command)
     }
     msg.push_str(footer);
+    println!("msg:{}", msg);
     telegram.send_message(chat_id, &msg)?;
     Ok(())
 }
