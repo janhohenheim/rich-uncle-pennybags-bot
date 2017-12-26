@@ -21,12 +21,8 @@ chf = "Swiss Francs"
 eth = "Ethereum"
 btc = "Bitcoin"
 req = "Request Network"
-
-[coins.iot]
-long_name = "Iota"
-coinmarketcap = "miota"
+iot = "Iota"
 
 [coins.qash]
 long_name = "QASH"
 bitfinex = "QSH"
-coinmarketcap = "qash"

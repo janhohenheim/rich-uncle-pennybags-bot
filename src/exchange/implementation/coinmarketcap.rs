@@ -24,14 +24,12 @@ impl Api for CoinMarketCap {
         let long_name = get_long_name(&pair.0);
         let conversion_symbol = get_converson_symbol(&pair.1);
         let endpoint = format!("ticker/{}/?convert={}", long_name, conversion_symbol);
-        println!("endpoint: {}", endpoint);
         let response = self.make_request(&endpoint).send()?.text()?;
         let response: Value = serde_json::from_str(&response)?;
         let response = &response[0];
-        println!("response: {}", response);
+
         let daily_change_percentage = parse_field(&response["percent_change_24h"])?;
         let field = format!("price_{}", conversion_symbol);
-        println!("field: {}", field);
         let last_trade_price = parse_field(&response[&field])?;
 
         Ok(TradingTicker {
