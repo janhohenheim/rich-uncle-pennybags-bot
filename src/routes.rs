@@ -27,7 +27,7 @@ pub fn receive_update(
                         println!("Failed to send help");
                     }
                 } else {
-                    let mut symbols = split_coins(&text);
+                    let mut symbols: Vec<_> = text.split('_').collect();
                     if symbols.len() == 1 {
                         symbols.push("usd");
                     }
@@ -99,18 +99,6 @@ fn handle_help(chat_id: i64, telegram: &TelegramApi) -> Result<()> {
         Please tell @Kekmeister if you want any additional features.\
     ")?;
     Ok(())
-}
-
-fn split_coins<'a>(text: &'a str) -> Vec<&'a str> {
-    const COIN_LEN: usize = 3;
-    if text.len() <= COIN_LEN {
-        vec![text]
-    } else {
-        let (a, b) = text.split_at(COIN_LEN);
-        let mut coins = split_coins(b);
-        coins.push(a);
-        coins
-    }
 }
 
 fn handle_pair(
