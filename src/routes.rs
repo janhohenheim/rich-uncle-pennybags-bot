@@ -5,6 +5,7 @@ use telegram::Api as TelegramApi;
 use telegram::types::*;
 use exchange::Api as ExchangeApi;
 use model::Coin;
+use model::toml::Name;
 use error::*;
 
 type Exchanges = Vec<Exchange>;
@@ -23,7 +24,7 @@ pub fn receive_update(
                 let text = &text[1..];
                 let chat_id = message.chat.id;
                 if text == "help" {
-                    if handle_help(chat_id, &telegram).is_err() {
+                    if handle_help(&coins, chat_id, &telegram).is_err() {
                         println!("Failed to send help");
                     }
                 } else {
@@ -66,38 +67,30 @@ fn parse_coin(coins: &Vec<Coin>, symbol: &str) -> Result<Coin> {
         .ok_or(Error::Parse(symbol.to_string()))
 }
 
-fn handle_help(chat_id: i64, telegram: &TelegramApi) -> Result<()> {
-    telegram.send_message(chat_id, "\
-        Simply use /<coinpair>. If you only specify one coin, it assumes you want it in USD. Examples:\n\
-        \n\
-        /eth Returns the current ETH/USD rate\n\
-        /ethbtc Returns the current ETH/BTC rate\n\
-        \n\
-        Available coins:\n\
-        /btc\tBitcoin\n\
-        /ltc\tLitecoin\n\
-        /eth\tEthereum\n\
-        /etc\tEthereum Classic\n\
-        /zec\tZCash\n\
-        /xmr\tMonero\n\
-        /das\tDash\n\
-        /xrp\tRipple\n\
-        /iot\tIota\n\
-        /eos\tEOS\n\
-        /san\tSantiment\n\
-        /omg\tOmiseGO\n\
-        /bch\tBcash\n\
-        /neo\tNEO\n\
-        /etp\tETP\n\
-        /qtu\tQtum\n\
-        /avt\tAventus\n\
-        /edo\tEidoo\n\
-        /btg\tBTG\n\
-        /dat\tStreamr\n\
-        /rrt\tRecovery Right Tokens\n\
-        \n\
-        Please tell @Kekmeister if you want any additional features.\
-    ")?;
+fn handle_help(coins: &Vec<Coin>, chat_id: i64, telegram: &TelegramApi) -> Result<()> {
+    let mut msg = "
+Simply use /coin1_coin2. If you only specify one coin, the bot assumes you want it in USD. Examples:
+
+/eth Returns the current Ethereum to U.S. Dollar rate
+/eth_btc Returns the current Ethereum to Bitcoin rate
+/btc_chf Returns the current Bitcoin to Swiss Franc rate
+
+Available currencies:
+"
+        .to_string();
+    let footer = "
+You can add a new currency yourself by adding it to the [coinfile](https://github.com/SirRade/rich-uncle-pennybags-bot/blob/master/Coins.toml)
+Please tell @Kekmeister if you want any additional features.";
+    for coin in coins {
+        let long_name = match coin.name {
+            Name::Simple(ref long_name) => &long_name,
+            Name::Detailed(ref detailed_name) => &detailed_name.long_name,
+        };
+        let command = format!("{}: {}\n", coin.short_name, long_name);
+        msg.push_str(&command)
+    }
+    msg.push_str(footer);
+    telegram.send_message(chat_id, &msg)?;
     Ok(())
 }
 
