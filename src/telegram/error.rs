@@ -1,4 +1,4 @@
-use super::super::reqwest::Error as RequestError;
+use reqwest::Error as RequestError;
 
 use std::result;
 pub type Result<T> = result::Result<T, Error>;
@@ -31,7 +31,6 @@ impl StdError for Error {
         }
     }
 }
-
 
 impl From<RequestError> for Error {
     fn from(err: RequestError) -> Error {

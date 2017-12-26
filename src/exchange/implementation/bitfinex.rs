@@ -1,4 +1,4 @@
-use super::reqwest;
+use reqwest;
 
 use exchange::error::*;
 use exchange::*;
@@ -32,16 +32,14 @@ impl Bitfinex {
     }
 
     fn parse_coin(coin: Coin) -> Result<String> {
-        Ok(
-            match coin {
-                Coin::USDollar => "usd",
-                Coin::Bitcoin => "btc",
-                Coin::Ethereum => "eth",
-                Coin::Iota => "iot",
+        Ok(match coin {
+            Coin::USDollar => "usd",
+            Coin::Bitcoin => "btc",
+            Coin::Ethereum => "eth",
+            Coin::Iota => "iot",
 
-                Coin::RequestNetwork => return Err(Error::CoinNotSupported(coin)),
-            }.to_string()
-        )
+            Coin::RequestNetwork => return Err(Error::CoinNotSupported(coin)),
+        }.to_string())
     }
 
     fn make_request(&self, endpoint: &str) -> reqwest::RequestBuilder {

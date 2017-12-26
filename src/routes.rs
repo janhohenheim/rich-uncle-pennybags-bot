@@ -1,5 +1,5 @@
-use super::rocket::State;
-use super::rocket_contrib::Json;
+use rocket::State;
+use rocket_contrib::Json;
 
 use telegram::Api as TelegramApi;
 use telegram::types::*;
@@ -7,13 +7,11 @@ use exchange::Api as ExchangeApi;
 use exchange::Coin;
 use error::*;
 
-
 type Exchanges = Vec<Exchange>;
 type Exchange = Box<ExchangeApi + Send + Sync>;
 
-
 #[post("/", data = "<update>")]
-pub fn receive_update (
+pub fn receive_update(
     update: Json<Update>,
     telegram: State<TelegramApi>,
     exchanges: State<Exchanges>,
@@ -38,8 +36,12 @@ pub fn receive_update (
                             // try both combinations
                             if handle_pair(pair, chat_id, &telegram, exchange).is_err() {
                                 let inverse = (pair.1, pair.0);
-                                if let Err(err) = handle_pair(inverse, chat_id, &telegram, exchange) {
-                                    println!("Failed to answer to message: {}, error: {:?}", text, err);
+                                if let Err(err) = handle_pair(inverse, chat_id, &telegram, exchange)
+                                {
+                                    println!(
+                                        "Failed to answer to message: {}, error: {:?}",
+                                        text, err
+                                    );
                                 }
                             }
                         }
@@ -114,29 +116,31 @@ fn split_coins<'a>(text: &'a str) -> Vec<&'a str> {
     }
 }
 
-fn handle_pair(coins: (&str, &str), chat_id: i64, telegram: &TelegramApi, exchange: &Exchange) -> Result<()> {
+fn handle_pair(
+    coins: (&str, &str),
+    chat_id: i64,
+    telegram: &TelegramApi,
+    exchange: &Exchange,
+) -> Result<()> {
     let pair = parse_coins(coins)?;
     let ticker = exchange.ticker(pair)?;
     let exchange_name = format!("*{}*", exchange.exchange_name());
-    
-    let last_price =  ticker.last_trade_price;
+
+    let last_price = ticker.last_trade_price;
     let mut price_amount = format!("{:.*}", 2, last_price);
     if price_amount == "0.00" {
         price_amount = format!("{:.*}", 6, last_price);
     }
     let price = format!(
-        "{} {}/{}", 
-        price_amount, 
-        coins.0.to_uppercase(), 
+        "{} {}/{}",
+        price_amount,
+        coins.0.to_uppercase(),
         coins.1.to_uppercase()
     );
 
     let percentage = ticker.daily_change_percentage;
     let emoji = get_development_emoji(percentage);
-    let development = format!(
-        "{}{:.*}% in the last 24h",
-         emoji, 
-         2, percentage);
+    let development = format!("{}{:.*}% in the last 24h", emoji, 2, percentage);
 
     let msg = format!("{}\n{}\n{}", exchange_name, price, development);
     telegram.send_message(chat_id, &msg)?;

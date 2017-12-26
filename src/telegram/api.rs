@@ -1,4 +1,4 @@
-use super::super::reqwest;
+use reqwest;
 use telegram::error::*;
 use telegram::types::*;
 

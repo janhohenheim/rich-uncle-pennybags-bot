@@ -1,5 +1,5 @@
-extern crate serde_json;
-use super::reqwest;
+use serde_json;
+use reqwest;
 
 use self::serde_json::Value;
 use exchange::error::*;
@@ -50,7 +50,7 @@ impl CoinMarketCap {
             Coin::Ethereum => "ethereum",
             Coin::Iota => "iota",
 
-            Coin::RequestNetwork => "request-network"
+            Coin::RequestNetwork => "request-network",
         }.to_string()
     }
 
@@ -61,7 +61,7 @@ impl CoinMarketCap {
             Coin::Ethereum => "eth",
             Coin::Iota => "miota",
 
-            Coin::RequestNetwork => "req"
+            Coin::RequestNetwork => "req",
         }.to_string()
     }
 

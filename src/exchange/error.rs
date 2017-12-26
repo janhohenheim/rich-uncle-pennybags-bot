@@ -1,4 +1,4 @@
-use super::super::reqwest::Error as RequestError;
+use reqwest::Error as RequestError;
 extern crate serde_json;
 use self::serde_json::error::Error as SerdeError;
 use exchange::Coin;
@@ -50,7 +50,6 @@ impl StdError for Error {
         }
     }
 }
-
 
 impl From<RequestError> for Error {
     fn from(err: RequestError) -> Error {

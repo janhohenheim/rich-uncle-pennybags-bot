@@ -1,4 +1,4 @@
-use super::rocket::error::LaunchError;
+use rocket::error::LaunchError;
 
 use std::result;
 use telegram::error::Error as TelegramError;
@@ -49,13 +49,11 @@ impl StdError for Error {
     }
 }
 
-
 impl From<LaunchError> for Error {
     fn from(err: LaunchError) -> Error {
         Error::Server(err)
     }
 }
-
 
 impl From<TelegramError> for Error {
     fn from(err: TelegramError) -> Error {
