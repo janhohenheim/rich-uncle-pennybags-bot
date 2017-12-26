@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-#[derive(Deserialize, Debug, Cloneç)]
+#[derive(Deserialize, Debug, Clone)]
 #[serde(deny_unknown_fields)]
 pub struct CoinFile {
     pub coins: HashMap<String, Name>,
