@@ -24,9 +24,7 @@ req = "Request Network"
 
 [coins.iot]
 long_name = "Iota"
-[coins.iot.coinmarketcap]
-id = "miota"
-conversion_symbol = "iot"
+coinmarketcap = "miota"
 
 [coins.qash]
 long_name = "QASH"
