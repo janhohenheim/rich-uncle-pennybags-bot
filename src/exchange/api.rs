@@ -1,21 +1,12 @@
 use exchange::error::*;
+use model::Coin;
 
 pub trait Api {
     fn new() -> Self
     where
         Self: Sized + Send + Sync;
-    fn ticker(&self, pair: (Coin, Coin)) -> Result<TradingTicker>;
+    fn ticker(&self, pair: &(Coin, Coin)) -> Result<TradingTicker>;
     fn exchange_name(&self) -> String;
-}
-
-#[derive(Debug)]
-pub enum Coin {
-    USDollar,
-    Bitcoin,
-    Ethereum,
-    Iota,
-
-    RequestNetwork,
 }
 
 #[derive(Debug)]

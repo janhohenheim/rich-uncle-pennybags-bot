@@ -1,5 +1,6 @@
 #![feature(plugin, custom_attribute)]
 #![plugin(rocket_codegen)]
+extern crate heck;
 extern crate reqwest;
 extern crate rocket;
 extern crate rocket_contrib;

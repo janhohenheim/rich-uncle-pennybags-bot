@@ -6,7 +6,8 @@ use exchange::Api as ExchangeApi;
 use exchange::implementation::*;
 use error::*;
 use routes;
-use model::CoinFile;
+use model::Coin;
+use model::toml::CoinFile;
 
 type Exchanges = Vec<Exchange>;
 type Exchange = Box<ExchangeApi + Send + Sync>;
@@ -14,7 +15,7 @@ type Exchange = Box<ExchangeApi + Send + Sync>;
 pub struct RichUnclePennybagsBot {
     telegram: TelegramApi,
     exchanges: Exchanges,
-    coins: CoinFile,
+    coins: Vec<Coin>,
 }
 impl RichUnclePennybagsBot {
     pub fn new(token: &str, username: &str, coinfile: &str) -> Self {
@@ -35,7 +36,7 @@ impl RichUnclePennybagsBot {
     }
 }
 
-fn parse_coins(coinfile: &str) -> CoinFile {
+fn parse_coins(coinfile: &str) -> Vec<Coin> {
     use std::fs::File;
     use std::io::Read;
 
@@ -55,5 +56,10 @@ Exact error",
         .expect("Failed to open coinfile")
         .read_to_string(&mut cointoml)
         .expect("Failed to read coinfile");
-    toml::from_str(&cointoml).expect(&error_msg)
+    let coinfile: CoinFile = toml::from_str(&cointoml).expect(&error_msg);
+    coinfile
+        .coins
+        .into_iter()
+        .map(|(short_name, name)| Coin { short_name, name })
+        .collect()
 }

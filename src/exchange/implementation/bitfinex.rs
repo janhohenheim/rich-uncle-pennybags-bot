@@ -2,6 +2,8 @@ use reqwest;
 
 use exchange::error::*;
 use exchange::*;
+use model::Coin;
+use model::toml::Name;
 
 #[derive(Debug)]
 pub struct Bitfinex {
@@ -13,10 +15,10 @@ impl Api for Bitfinex {
             client: reqwest::Client::new(),
         }
     }
-    fn ticker(&self, pair: (Coin, Coin)) -> Result<TradingTicker> {
-        let coins = Self::parse_coins(pair)?;
-        let pair = format!("{}{}", coins.0, coins.1);
-        let endpoint = format!("ticker/t{}", pair.to_uppercase());
+    fn ticker(&self, pair: &(Coin, Coin)) -> Result<TradingTicker> {
+        let symbols = (get_symbol(&pair.0), get_symbol(&pair.1));
+        let symbol_pair = format!("{}{}", symbols.0, symbols.1);
+        let endpoint = format!("ticker/t{}", symbol_pair);
         let response: Vec<f32> = self.make_request(&endpoint).send()?.json()?;
         parse_ticker(&response)
     }
@@ -27,26 +29,21 @@ impl Api for Bitfinex {
 }
 
 impl Bitfinex {
-    fn parse_coins(coins: (Coin, Coin)) -> Result<(String, String)> {
-        Ok((Self::parse_coin(coins.0)?, Self::parse_coin(coins.1)?))
-    }
-
-    fn parse_coin(coin: Coin) -> Result<String> {
-        Ok(match coin {
-            Coin::USDollar => "usd",
-            Coin::Bitcoin => "btc",
-            Coin::Ethereum => "eth",
-            Coin::Iota => "iot",
-
-            Coin::RequestNetwork => return Err(Error::CoinNotSupported(coin)),
-        }.to_string())
-    }
-
     fn make_request(&self, endpoint: &str) -> reqwest::RequestBuilder {
         const API_URL_PREFIX: &str = "https://api.bitfinex.com/v2/";
         let url = format!("{}{}", API_URL_PREFIX, endpoint);
         self.client.get(&url)
     }
+}
+
+fn get_symbol(coin: &Coin) -> String {
+    match coin.name {
+        Name::Simple(_) => &coin.short_name,
+        Name::Detailed(ref name) => match name.bitfinex {
+            Some(ref symbol) => symbol,
+            None => &coin.short_name,
+        },
+    }.to_uppercase()
 }
 
 fn parse_ticker(v: &[f32]) -> Result<TradingTicker> {

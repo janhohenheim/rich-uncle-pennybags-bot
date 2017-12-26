@@ -1,7 +1,7 @@
 use reqwest::Error as RequestError;
 extern crate serde_json;
 use self::serde_json::error::Error as SerdeError;
-use exchange::Coin;
+use model::Coin;
 
 use std::result;
 pub type Result<T> = result::Result<T, Error>;

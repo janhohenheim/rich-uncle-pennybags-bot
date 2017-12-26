@@ -6,6 +6,7 @@ version = "0.2.0"
 [dependencies]
 dotenv = "0.10.1"
 dotenv_macros = "0.10.0"
+heck = "0.3.0"
 reqwest = "0.8.2"
 rocket = "0.3.5"
 rocket_codegen = "0.3.5"

@@ -4,7 +4,7 @@ use rocket_contrib::Json;
 use telegram::Api as TelegramApi;
 use telegram::types::*;
 use exchange::Api as ExchangeApi;
-use exchange::Coin;
+use model::Coin;
 use error::*;
 
 type Exchanges = Vec<Exchange>;
@@ -15,6 +15,7 @@ pub fn receive_update(
     update: Json<Update>,
     telegram: State<TelegramApi>,
     exchanges: State<Exchanges>,
+    coins: State<Vec<Coin>>,
 ) -> Result<()> {
     if let Some(ref message) = update.message {
         if let Some(ref text) = telegram.extract_text(&message) {
@@ -26,17 +27,21 @@ pub fn receive_update(
                         println!("Failed to send help");
                     }
                 } else {
-                    let mut coins = split_coins(&text);
-                    if coins.len() == 1 {
-                        coins.push("usd");
+                    let mut symbols = split_coins(&text);
+                    if symbols.len() == 1 {
+                        symbols.push("usd");
                     }
-                    if coins.len() == 2 {
+                    if symbols.len() == 2 {
+                        let pair = (
+                            parse_coin(&coins, symbols[0])?,
+                            parse_coin(&coins, symbols[1])?,
+                        );
+                        let inverse = (pair.1.clone(), pair.0.clone());
                         for exchange in exchanges.iter() {
-                            let pair = (coins[0], coins[1]);
                             // try both combinations
-                            if handle_pair(pair, chat_id, &telegram, exchange).is_err() {
-                                let inverse = (pair.1, pair.0);
-                                if let Err(err) = handle_pair(inverse, chat_id, &telegram, exchange)
+                            if handle_pair(&pair, chat_id, &telegram, exchange).is_err() {
+                                if let Err(err) =
+                                    handle_pair(&inverse, chat_id, &telegram, exchange)
                                 {
                                     println!(
                                         "Failed to answer to message: {}, error: {:?}",
@@ -53,20 +58,12 @@ pub fn receive_update(
     Ok(())
 }
 
-fn parse_coins(symbols: (&str, &str)) -> Result<(Coin, Coin)> {
-    Ok((parse_coin(symbols.0)?, parse_coin(symbols.1)?))
-}
-
-fn parse_coin(symbol: &str) -> Result<Coin> {
-    match symbol {
-        "usd" => Ok(Coin::USDollar),
-        "btc" => Ok(Coin::Bitcoin),
-        "eth" => Ok(Coin::Ethereum),
-        "iot" => Ok(Coin::Iota),
-
-        "req" => Ok(Coin::RequestNetwork),
-        _ => Err(Error::Parse(symbol.to_string())),
-    }
+fn parse_coin(coins: &Vec<Coin>, symbol: &str) -> Result<Coin> {
+    coins
+        .iter()
+        .find(|coin| coin.short_name == symbol)
+        .map(|coin| coin.clone())
+        .ok_or(Error::Parse(symbol.to_string()))
 }
 
 fn handle_help(chat_id: i64, telegram: &TelegramApi) -> Result<()> {
@@ -117,12 +114,11 @@ fn split_coins<'a>(text: &'a str) -> Vec<&'a str> {
 }
 
 fn handle_pair(
-    coins: (&str, &str),
+    pair: &(Coin, Coin),
     chat_id: i64,
     telegram: &TelegramApi,
     exchange: &Exchange,
 ) -> Result<()> {
-    let pair = parse_coins(coins)?;
     let ticker = exchange.ticker(pair)?;
     let exchange_name = format!("*{}*", exchange.exchange_name());
 
@@ -134,8 +130,8 @@ fn handle_pair(
     let price = format!(
         "{} {}/{}",
         price_amount,
-        coins.0.to_uppercase(),
-        coins.1.to_uppercase()
+        pair.0.short_name.to_uppercase(),
+        pair.1.short_name.to_uppercase()
     );
 
     let percentage = ticker.daily_change_percentage;

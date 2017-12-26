@@ -2,7 +2,7 @@
 #short_name = "Long name of the coin"
 # This can be expanded into
 #[short_name]
-#name = "Long name of the coin"
+#long_name = "Long name of the coin"
 #bitfinex = "The name used for access on the Bitfinex API. Default: [short_name] in CAPSLOCK"
 #coinmarketcap = "The name used for access on the CoinMarketCap API. Default: name in kebab-case"
 # This can be expanded into:
@@ -21,12 +21,12 @@ btc = "Bitcoin"
 req = "Request Network"
 
 [coins.iot]
-name = "Iota"
+long_name = "Iota"
 [coins.iot.coinmarketcap]
 id = "miota"
 conversion_symbol = "iot"
 
 [coins.qash]
-name = "QASH"
+long_name = "QASH"
 bitfinex = "QSH"
 coinmarketcap = "qash"
