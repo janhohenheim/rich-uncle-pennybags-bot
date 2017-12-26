@@ -1,42 +1,32 @@
 # If you want to add a new currency, use this template:
+#short_name = "Long name of the coin"
+# This can be expanded into
 #[short_name]
 #name = "Long name of the coin"
-#[short_name.exchanges]
 #bitfinex = "The name used for access on the Bitfinex API. Default: [short_name] in CAPSLOCK"
 #coinmarketcap = "The name used for access on the CoinMarketCap API. Default: name in kebab-case"
 # This can be expanded into:
-#[eth.exchange.coinmarketcap]
+#[eth.coinmarketcap]
 #id = "The name used for access on the CoinMarketCap API. Default: [short_name.name] in kebab-case"
 #conversion_symbol = "The symbol used for access on the CoinMarketCap API. Default: [short_name] in lowercase"
-
+[coins]
 # Fiat
-[usd]
-name = "U.S. Dollar"
-
-[eur]
-name = "Euro"
-
-[chf]
-name = "Swiss Francs"
+usd = "U.S. Dollar"
+eur = "Euro"
+chf = "Swiss Francs"
 
 # Coins
-[eth]
-name = "Ethereum"
+eth = "Ethereum"
+btc = "Bitcoin"
+req = "Request Network"
 
-[btc]
-name = "Bitcoin"
-
-
-[iot]
+[coins.iot]
 name = "Iota"
-[iot.exchanges]
-coinmarketcap = "miota"
+[coins.iot.coinmarketcap]
+id = "miota"
+conversion_symbol = "iot"
 
-# Tokens
-[qash]
+[coins.qash]
 name = "QASH"
-[qash.exchanges]
 bitfinex = "QSH"
-
-[req]
-name = "Request Network"
+coinmarketcap = "qash"
