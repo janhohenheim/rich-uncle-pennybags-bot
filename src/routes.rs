@@ -33,10 +33,25 @@ pub fn receive_update(
                         symbols.push("usd");
                     }
                     if symbols.len() == 2 {
-                        let pair = (
-                            parse_coin(&coins, symbols[0])?,
-                            parse_coin(&coins, symbols[1])?,
-                        );
+                        let first_coin = parse_coin(&coins, symbols[0]);
+                        if let Err(e) = first_coin {
+                            println!(
+                                "Failed to parse first coin: \"{}\", error: {}",
+                                symbols[0], e
+                            );
+                            return Ok(());
+                        }
+                        let first_coin = first_coin.unwrap();
+                        let second_coin = parse_coin(&coins, symbols[1]);
+                        if let Err(e) = second_coin {
+                            println!(
+                                "Failed to parse second coin: \"{}\", error: {}",
+                                symbols[1], e
+                            );
+                            return Ok(());
+                        }
+                        let second_coin = second_coin.unwrap();
+                        let pair = (first_coin, second_coin);
                         let inverse = (pair.1.clone(), pair.0.clone());
                         for exchange in exchanges.iter() {
                             // try both combinations
