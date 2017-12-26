@@ -24,8 +24,8 @@ pub fn receive_update(
                 let text = &text[1..];
                 let chat_id = message.chat.id;
                 if text == "help" {
-                    if handle_help(&coins, chat_id, &telegram).is_err() {
-                        println!("Failed to send help");
+                    if let Err(e) = handle_help(&coins, chat_id, &telegram) {
+                        println!("Failed to send help: {}", e);
                     }
                 } else {
                     let mut symbols: Vec<_> = text.split('_').collect();
@@ -90,7 +90,6 @@ Please tell @Kekmeister if you want any additional features.";
         msg.push_str(&command)
     }
     msg.push_str(footer);
-    println!("msg:{}", msg);
     telegram.send_message(chat_id, &msg)?;
     Ok(())
 }
