@@ -120,6 +120,11 @@ fn handle_pair(
     let ticker = exchange.ticker(pair)?;
     let exchange_name = format!("*{}*", exchange.exchange_name());
 
+    let long_name = match pair.0.name {
+        Name::Simple(ref long_name) => &long_name,
+        Name::Detailed(ref detailed_name) => &detailed_name.long_name,
+    };
+
     let last_price = ticker.last_trade_price;
     let mut price_amount = format!("{:.*}", 2, last_price);
     if price_amount == "0.00" {
@@ -136,7 +141,10 @@ fn handle_pair(
     let emoji = get_development_emoji(percentage);
     let development = format!("{}{:.*}% in the last 24h", emoji, 2, percentage);
 
-    let msg = format!("{}\n{}\n{}", exchange_name, price, development);
+    let msg = format!(
+        "{}: {}\n{}\n{}",
+        exchange_name, long_name, price, development
+    );
     telegram.send_message(chat_id, &msg)?;
     Ok(())
 }
