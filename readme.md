@@ -20,6 +20,7 @@ Available currencies:
 - chf *Swiss Francs*
 - bch *Bitcoin Cash*
 - xrb *RaiBlocks*
+- xrp *Ripple*
 
 You can add a new currency yourself by adding it to the [coinfile](https://github.com/SirRade/rich-uncle-pennybags-bot/blob/master/Coins.toml)
 Please tell [@Kekmeister](http://telegram.me/Kekmeister) if you want any additional features.
