@@ -21,8 +21,8 @@ impl Api for CoinMarketCap {
     }
 
     fn ticker(&self, pair: &(Coin, Coin)) -> Result<TradingTicker> {
-        let long_name = get_long_name(&pair.0);
-        let conversion_symbol = get_converson_symbol(&pair.1);
+        let long_name = long_name(&pair.0);
+        let conversion_symbol = converson_symbol(&pair.1);
         let endpoint = format!("ticker/{}/?convert={}", long_name, conversion_symbol);
         let response = self.make_request(&endpoint).send()?.text()?;
         let response: Value = serde_json::from_str(&response)?;
@@ -52,7 +52,7 @@ impl CoinMarketCap {
     }
 }
 
-fn get_long_name(coin: &Coin) -> String {
+fn long_name(coin: &Coin) -> String {
     match coin.name {
         Name::Simple(ref long_name) => &long_name,
         Name::Detailed(ref name) => match name.coinmarketcap {
@@ -65,7 +65,7 @@ fn get_long_name(coin: &Coin) -> String {
     }.to_kebab_case()
 }
 
-fn get_converson_symbol(coin: &Coin) -> String {
+fn converson_symbol(coin: &Coin) -> String {
     match coin.name {
         Name::Simple(_) => &coin.short_name,
         Name::Detailed(ref name) => match name.coinmarketcap {

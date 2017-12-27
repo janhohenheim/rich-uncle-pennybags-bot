@@ -5,7 +5,6 @@ use telegram::Api as TelegramApi;
 use telegram::model::*;
 use exchange::Api as ExchangeApi;
 use model::Coin;
-use model::toml::Name;
 use error::*;
 
 type Exchanges = Vec<Exchange>;
@@ -99,10 +98,7 @@ Please tell @Kekmeister if you want any additional features.
 
 If you're german speaking, feel free to [join us](https://t.me/joinchat/Azh980Rug594nvfzLEQsIw) 🙂";
     for coin in coins {
-        let long_name = match coin.name {
-            Name::Simple(ref long_name) => &long_name,
-            Name::Detailed(ref detailed_name) => &detailed_name.long_name,
-        };
+        let long_name = coin.long_name();
         let command = format!("- {} _{}_\n", coin.short_name, long_name);
         msg.push_str(&command)
     }
@@ -120,10 +116,7 @@ fn handle_pair(
     let ticker = exchange.ticker(pair)?;
     let exchange_name = format!("*{}*", exchange.exchange_name());
 
-    let long_name = match pair.0.name {
-        Name::Simple(ref long_name) => &long_name,
-        Name::Detailed(ref detailed_name) => &detailed_name.long_name,
-    };
+    let long_name = pair.0.long_name();
 
     let last_price = ticker.last_trade_price;
     let mut price_amount = format!("{:.*}", 2, last_price);
@@ -138,7 +131,7 @@ fn handle_pair(
     );
 
     let percentage = ticker.daily_change_percentage;
-    let emoji = get_development_emoji(percentage);
+    let emoji = development_emoji(percentage);
     let development = format!("{}{:.*}% in the last 24h", emoji, 2, percentage);
 
     let msg = format!(
@@ -149,7 +142,7 @@ fn handle_pair(
     Ok(())
 }
 
-fn get_development_emoji(percentage: f32) -> &'static str {
+fn development_emoji(percentage: f32) -> &'static str {
     if percentage.is_sign_positive() {
         "📈 +"
     } else {

@@ -16,7 +16,7 @@ impl Api for Bitfinex {
         }
     }
     fn ticker(&self, pair: &(Coin, Coin)) -> Result<TradingTicker> {
-        let symbols = (get_symbol(&pair.0), get_symbol(&pair.1));
+        let symbols = (symbol(&pair.0), symbol(&pair.1));
         let symbol_pair = format!("{}{}", symbols.0, symbols.1);
         let endpoint = format!("ticker/t{}", symbol_pair);
         let response: Vec<f32> = self.make_request(&endpoint).send()?.json()?;
@@ -37,7 +37,7 @@ impl Bitfinex {
     }
 }
 
-fn get_symbol(coin: &Coin) -> String {
+fn symbol(coin: &Coin) -> String {
     match coin.name {
         Name::Simple(_) => &coin.short_name,
         Name::Detailed(ref name) => match name.bitfinex {
