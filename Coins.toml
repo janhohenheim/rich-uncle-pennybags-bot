@@ -23,7 +23,10 @@ req = "Request Network"
 iot = "Iota"
 edo = "Eidoo"
 bch = "Bitcoin Cash"
-xrb = "RaiBlocks"
+
+[coins.xrb]
+long_name = "RaiBlocks"
+coinmarketcap = "raiblocks"
 
 [coins.gnt]
 long_name = "Golem Network Token"
