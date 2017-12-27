@@ -84,11 +84,11 @@ fn parse_coin(coins: &Vec<Coin>, symbol: &str) -> Result<Coin> {
 
 fn handle_help(coins: &Vec<Coin>, chat_id: i64, telegram: &TelegramApi) -> Result<()> {
     let mut msg = "
-Simply use /coin1_coin2. If you only specify one coin, the bot assumes you want it in USD. Examples:
+Simply use `/firstcoin_secondcoin`. If you only specify one coin, the bot assumes you want it in USD. Examples:
 
-/eth Returns the current Ethereum to U.S. Dollar rate
-/eth_btc Returns the current Ethereum to Bitcoin rate
-/btc_chf Returns the current Bitcoin to Swiss Franc rate
+`/eth` Returns the current Ethereum to U.S. Dollar rate
+`/eth_btc` Returns the current Ethereum to Bitcoin rate
+`/btc_chf` Returns the current Bitcoin to Swiss Franc rate
 
 Available currencies:
 "
