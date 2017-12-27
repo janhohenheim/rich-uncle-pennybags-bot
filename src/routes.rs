@@ -101,7 +101,7 @@ Please tell @Kekmeister if you want any additional features.";
             Name::Simple(ref long_name) => &long_name,
             Name::Detailed(ref detailed_name) => &detailed_name.long_name,
         };
-        let command = format!("{}: {}\n", coin.short_name, long_name);
+        let command = format!("- {} ({})\n", coin.short_name, long_name);
         msg.push_str(&command)
     }
     msg.push_str(footer);

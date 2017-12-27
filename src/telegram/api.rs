@@ -17,7 +17,7 @@ impl Api {
         }
     }
     pub fn send_message(&self, chat_id: i64, text: &str) -> Result<Response<Message>> {
-        println!("chat_id:\n{}, text:\n{}", chat_id, text);
+        println!("chat_id: {}", chat_id);
         Ok(self.make_request("sendMessage")
             .form(&[
                 ["chat_id", &chat_id.to_string()],
