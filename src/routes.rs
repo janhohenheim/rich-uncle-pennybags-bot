@@ -2,7 +2,7 @@ use rocket::State;
 use rocket_contrib::Json;
 
 use telegram::Api as TelegramApi;
-use telegram::types::*;
+use telegram::model::*;
 use exchange::Api as ExchangeApi;
 use model::Coin;
 use model::toml::Name;

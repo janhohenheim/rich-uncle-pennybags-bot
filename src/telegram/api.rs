@@ -1,6 +1,6 @@
 use reqwest;
 use telegram::error::*;
-use telegram::types::*;
+use telegram::model::*;
 
 pub struct Api {
     api_url: String,
