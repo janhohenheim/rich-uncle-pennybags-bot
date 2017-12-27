@@ -95,13 +95,15 @@ Available currencies:
         .to_string();
     let footer = "
 You can add a new currency yourself by adding it to the [coinfile](https://github.com/SirRade/rich-uncle-pennybags-bot/blob/master/Coins.toml)
-Please tell @Kekmeister if you want any additional features.";
+Please tell @Kekmeister if you want any additional features.
+
+If you're german speaking, feel free to [join us](https://t.me/joinchat/Azh980Rug594nvfzLEQsIw) 🙂";
     for coin in coins {
         let long_name = match coin.name {
             Name::Simple(ref long_name) => &long_name,
             Name::Detailed(ref detailed_name) => &detailed_name.long_name,
         };
-        let command = format!("- {} ({})\n", coin.short_name, long_name);
+        let command = format!("- {} __{}__\n", coin.short_name, long_name);
         msg.push_str(&command)
     }
     msg.push_str(footer);
