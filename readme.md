@@ -3,9 +3,9 @@
 
 Simply use `/firstcoin_secondcoin`. If you only specify one coin, the bot assumes you want it in USD. Examples:
 
-`/eth` Returns the current Ethereum to U.S. Dollar rate
-`/eth_btc` Returns the current Ethereum to Bitcoin rate
-`/btc_chf` Returns the current Bitcoin to Swiss Franc rate
+`/eth` Returns the current Ethereum to U.S. Dollar rate  
+`/eth_btc` Returns the current Ethereum to Bitcoin rate  
+`/btc_chf` Returns the current Bitcoin to Swiss Franc rate  
 
 Available currencies:
 - eur *Euro*
