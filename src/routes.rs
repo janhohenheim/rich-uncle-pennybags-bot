@@ -103,7 +103,7 @@ If you're german speaking, feel free to [join us](https://t.me/joinchat/Azh980Ru
             Name::Simple(ref long_name) => &long_name,
             Name::Detailed(ref detailed_name) => &detailed_name.long_name,
         };
-        let command = format!("- {} __{}__\n", coin.short_name, long_name);
+        let command = format!("- {} _{}_\n", coin.short_name, long_name);
         msg.push_str(&command)
     }
     msg.push_str(footer);
