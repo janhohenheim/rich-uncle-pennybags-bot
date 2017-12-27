@@ -32,6 +32,7 @@ impl Bitfinex {
     fn make_request(&self, endpoint: &str) -> reqwest::RequestBuilder {
         const API_URL_PREFIX: &str = "https://api.bitfinex.com/v2/";
         let url = format!("{}{}", API_URL_PREFIX, endpoint);
+        println!("Making request at URL: {}", url);
         self.client.get(&url)
     }
 }
