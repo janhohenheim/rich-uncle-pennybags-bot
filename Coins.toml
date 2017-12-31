@@ -58,8 +58,7 @@ xrp = "Ripple"
 xmr = "Monero"
 ada = "Cardano"
 storj = "Storj"
-LUN = "Lunyr"
-
+lun = "Lunyr"
 
 # Coins that need additional information
 [coins.xrb]
