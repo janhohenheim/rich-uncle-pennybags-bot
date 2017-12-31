@@ -55,11 +55,24 @@ iot = "Iota"
 edo = "Eidoo"
 bch = "Bitcoin Cash"
 xrp = "Ripple"
+xmr = "Monero"
+ada = "Cardano"
+storj = "Storj"
+LUN = "Lunyr"
+
 
 # Coins that need additional information
 [coins.xrb]
 long_name = "RaiBlocks"
 coinmarketcap = "raiblocks"
+
+[coins.lend]
+long_name = "ETHLend"
+coinmarketcap = "ethlend"
+
+[coins.omg]
+long_name = "OmiseGO"
+coinmarketcap = "omisego"
 
 [coins.gnt]
 long_name = "Golem Network Token"
