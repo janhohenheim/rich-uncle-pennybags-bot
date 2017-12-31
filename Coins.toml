@@ -56,9 +56,7 @@ edo = "Eidoo"
 bch = "Bitcoin Cash"
 xrp = "Ripple"
 xmr = "Monero"
-omg = "OmiseGO"
-ada = Cardano
-lend = "ETHLend"
+ada = "Cardano"
 storj = "Storj"
 LUN = "Lunyr"
 
@@ -67,6 +65,14 @@ LUN = "Lunyr"
 [coins.xrb]
 long_name = "RaiBlocks"
 coinmarketcap = "raiblocks"
+
+[coins.lend]
+long_name = "ETHLend"
+coinmarketcap = "ethlend"
+
+[coins.omg]
+long_name = "OmiseGO"
+coinmarketcap = "omisego"
 
 [coins.gnt]
 long_name = "Golem Network Token"
