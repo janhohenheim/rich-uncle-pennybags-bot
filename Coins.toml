@@ -55,6 +55,13 @@ iot = "Iota"
 edo = "Eidoo"
 bch = "Bitcoin Cash"
 xrp = "Ripple"
+xmr = "Monero"
+omg = "OmiseGO"
+ada = Cardano
+lend = "ETHLend"
+storj = "Storj"
+LUN = "Lunyr"
+
 
 # Coins that need additional information
 [coins.xrb]
