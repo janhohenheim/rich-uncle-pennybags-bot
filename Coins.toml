@@ -59,6 +59,7 @@ xmr = "Monero"
 ada = "Cardano"
 storj = "Storj"
 lun = "Lunyr"
+trx = "Tron"
 
 # Coins that need additional information
 [coins.xrb]
