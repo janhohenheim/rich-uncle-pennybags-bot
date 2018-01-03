@@ -50,6 +50,7 @@ zar = "South African Rand"
 # Cryptocurrencies
 eth = "Ethereum"
 btc = "Bitcoin"
+ltc = "Litecoin"
 req = "Request Network"
 iot = "Iota"
 edo = "Eidoo"
