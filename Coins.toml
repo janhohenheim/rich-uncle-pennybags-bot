@@ -62,6 +62,10 @@ storj = "Storj"
 lun = "Lunyr"
 trx = "Tron"
 neu = "Neumark"
+bat = "Basic Attention Token"
+xlm = "Stellar"
+sub = "Substratum"
+
 
 # Coins that need additional information
 [coins.xrb]
