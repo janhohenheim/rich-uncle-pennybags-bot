@@ -83,3 +83,7 @@ coinmarketcap = "golem"
 [coins.qash]
 long_name = "QASH"
 bitfinex = "QSH"
+
+[coins.eng]
+long_name = "Enigma"
+coinmarketcap = "Enigma Project"
