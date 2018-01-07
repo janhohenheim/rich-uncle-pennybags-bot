@@ -95,3 +95,7 @@ coinmarketcap = "Enigma Project"
 [coins.spank]
 long_name = "SpankChain"
 coinmarketcap = "spankchain"
+
+[coins.dnt]
+long_name = "district0x"
+coinmarketcap = "0x"
