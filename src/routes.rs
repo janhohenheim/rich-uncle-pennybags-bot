@@ -96,7 +96,8 @@ Available currencies:
 You can add a new currency yourself by adding it to the [coinfile](https://github.com/SirRade/rich-uncle-pennybags-bot/blob/master/Coins.toml)
 Please tell @Kekmeister if you want any additional features.
 
-If you're german speaking, feel free to [join us](https://t.me/joinchat/Azh980Rug594nvfzLEQsIw) 🙂";
+If you're german speaking, feel free to [join us](https://t.me/joinchat/Azh980Rug594nvfzLEQsIw) 🙂
+Last but not least, if you like the bot, consider buying me a drink at [jnferner.eth (0x74cc5Ee15E0D13Da72d459a8166e61897E4C308D)](https://etherscan.io/address/0x74cc5Ee15E0D13Da72d459a8166e61897E4C308D)";
     for coin in coins {
         let long_name = coin.long_name();
         let command = format!("- {} _{}_\n", coin.short_name, long_name);
