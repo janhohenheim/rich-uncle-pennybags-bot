@@ -65,7 +65,7 @@ neu = "Neumark"
 bat = "Basic Attention Token"
 xlm = "Stellar"
 sub = "Substratum"
-
+doge = "Dogecoin"
 
 # Coins that need additional information
 [coins.xrb]
