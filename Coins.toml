@@ -99,3 +99,7 @@ coinmarketcap = "spankchain"
 [coins.dnt]
 long_name = "district0x"
 coinmarketcap = "0x"
+
+[coins.meme]
+long_name = "Memetic / PepeCoin"
+coinmarketcap = "memetic"
