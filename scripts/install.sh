@@ -13,6 +13,7 @@ ssh jnf service $BOTNAME stop &&
 
 echo  -e "\033[33;36m Copying files to $LOCATION... \033[0m" &&
 ssh jnf cp $BOTNAME/target/release/$BOTNAME $LOCATION &&
+ssh jnf cp $BOTNAME/.env $LOCATION &&
 ssh jnf cp $BOTNAME/Coins.toml $LOCATION &&
 
 echo  -e "\033[33;36m Starting services... \033[0m" &&
