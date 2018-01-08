@@ -17,4 +17,4 @@ ssh jnf cp $BOTNAME/Coins.toml $LOCATION &&
 echo  -e "\033[33;36m Starting services... \033[0m" &&
 ssh jnf service $BOTNAME start &&
 
-echo  -e "\033[33;32m Done deploying! \033[0m";
+echo  -e "\033[33;32m Done installing! \033[0m";
