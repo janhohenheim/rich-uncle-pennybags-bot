@@ -219,4 +219,3 @@ fn development_emoji(percentage: f32) -> &'static str {
         "📉 "
     }
 }
-}
