@@ -20,21 +20,18 @@ pub fn receive_update(
     if let Some(ref message) = update.message {
         if let Some(ref text) = telegram.extract_text(&message) {
             if text.starts_with('/') {
-                let command = &text[1..];
+                let command = text[1..].to_lowercase();
                 let chat_id = message.chat.id;
                 let command_handler = CommandHandler {
-                    command,
+                    command: &command,
                     chat_id,
                     coins: &coins,
                     telegram: &telegram,
                     exchanges: &exchanges,
                 };
-                match command {
-                    "help" => {
-                        if let Err(e) = handle_help(&coins, chat_id, &telegram) {
-                            println!("Failed to send help: {}", e);
-                        }
-                    }
+                match command.as_ref() {
+                    "help" => handle_help(&coins, chat_id, &telegram)?,
+                    "ens" => command_handler.handle_ens()?,
                     _ => command_handler.handle_ticker()?,
                 }
             }
@@ -52,6 +49,12 @@ struct CommandHandler<'a> {
 }
 
 impl<'a> CommandHandler<'a> {
+    fn send_message(&self, msg: &str) -> Result<Response<Message>> {
+        self.telegram
+            .send_message(self.chat_id, msg)
+            .map_err(|e| e.into())
+    }
+
     fn handle_ticker(&self) -> Result<()> {
         let mut symbols: Vec<_> = self.command.split('_').collect();
         if symbols.len() == 1 {
@@ -81,11 +84,20 @@ impl<'a> CommandHandler<'a> {
             for exchange in self.exchanges.iter() {
                 // try both combinations
                 if handle_pair(&pair, self.chat_id, self.telegram, exchange).is_err() {
-                    handle_pair(&inverse, self.chat_id, self.telegram, exchange)?
+                    if let Err(err) = handle_pair(&inverse, self.chat_id, self.telegram, exchange) {
+                        println!(
+                            "Failed to answer to message: {}, error: {:?}",
+                            self.command, err
+                        );
+                    }
                 }
             }
         }
         Ok(())
+    }
+    fn handle_ens(&self) -> Result<()> {
+        self.send_message("[Ethereum Name Service](https://www.myetherwallet.com/#ens)")
+            .map(|_| ())
     }
 }
 
