@@ -29,12 +29,7 @@ pub fn receive_update(
                     telegram: &telegram,
                     exchanges: &exchanges,
                 };
-                match command.as_ref() {
-                    "help" => command_handler.handle_help()?,
-                    "ens" => command_handler.handle_ens()?,
-                    "hrb" => command_handler.handle_harbour()?,
-                    _ => command_handler.handle_ticker()?,
-                }
+                command_handler.handle(&command)?;
             }
         }
     }
@@ -50,6 +45,16 @@ struct CommandHandler<'a> {
 }
 
 impl<'a> CommandHandler<'a> {
+    fn handle(&self, command: &str) -> Result<()> {
+        match command {
+            "help" => self.handle_help()?,
+            "ens" => self.handle_ens()?,
+            "hrb" => self.handle_harbour()?,
+            _ => self.handle_ticker()?,
+        }
+        Ok(())
+    }
+
     fn send_message(&self, msg: &str) -> Result<Response<Message>> {
         self.telegram
             .send_message(self.chat_id, msg)
