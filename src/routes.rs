@@ -30,7 +30,7 @@ pub fn receive_update(
                     exchanges: &exchanges,
                 };
                 match command.as_ref() {
-                    "help" => handle_help(&coins, chat_id, &telegram)?,
+                    "help" => command_handler.handle_help()?,
                     "ens" => command_handler.handle_ens()?,
                     "hrb" => command_handler.handle_harbour()?,
                     _ => command_handler.handle_ticker()?,
@@ -84,8 +84,8 @@ impl<'a> CommandHandler<'a> {
             let inverse = (pair.1.clone(), pair.0.clone());
             for exchange in self.exchanges.iter() {
                 // try both combinations
-                if handle_pair(&pair, self.chat_id, self.telegram, exchange).is_err() {
-                    if let Err(err) = handle_pair(&inverse, self.chat_id, self.telegram, exchange) {
+                if self.handle_pair(&pair, &exchange).is_err() {
+                    if let Err(err) = self.handle_pair(&inverse, &exchange) {
                         println!(
                             "Failed to answer to message: {}, error: {:?}",
                             self.command, err
@@ -110,7 +110,7 @@ impl<'a> CommandHandler<'a> {
                 0 => "69",
                 1 => "420",
                 2 => "1337",
-                _ => unreachable!()
+                _ => unreachable!(),
             };
             price.push_str(num);
         }
@@ -124,7 +124,7 @@ impl<'a> CommandHandler<'a> {
                     1 => "😂",
                     2 => "🔥",
                     3 => "💯",
-                    _ => unreachable!()
+                    _ => unreachable!(),
                 };
                 emoji.push_str(moji);
             }
@@ -132,19 +132,75 @@ impl<'a> CommandHandler<'a> {
         };
 
         let msg = format!(
-"🌍 The entire fucking world {}
+            "🌍 The entire fucking world {}
 Harbour - U.S. Dollar {}
 {} HRB/USD {}
-📈 +{:.*}% in the last 24h {}", 
-            gen_rand_emoji(), 
-            gen_rand_emoji(), 
-            price, 
-            gen_rand_emoji(), 
-            2, rng.gen_range(20.0, 9999999.99), 
+📈 +{:.*}% in the last 24h {}",
+            gen_rand_emoji(),
+            gen_rand_emoji(),
+            price,
+            gen_rand_emoji(),
+            2,
+            rng.gen_range(20.0, 9999999.99),
             gen_rand_emoji()
         );
-        self.send_message(&msg)
-            .map(|_| ())
+        self.send_message(&msg).map(|_| ())
+    }
+
+    fn handle_help(&self) -> Result<()> {
+        let mut msg = "
+    Simply use `/firstcoin_secondcoin`. If you only specify one coin, the bot assumes you want it in USD. Examples:
+
+    `/eth` Returns the current Ethereum to U.S. Dollar rate
+    `/eth_btc` Returns the current Ethereum to Bitcoin rate
+    `/btc_chf` Returns the current Bitcoin to Swiss Franc rate
+
+    Available currencies:
+    ".to_string();
+        let footer = "
+    You can add a new currency yourself by adding it to the [coinfile](https://github.com/SirRade/rich-uncle-pennybags-bot/blob/master/Coins.toml)
+    Please tell @Kekmeister if you want any additional features.
+
+    If you're german speaking, feel free to [join us](https://t.me/joinchat/Azh980Rug594nvfzLEQsIw) 🙂
+    Last but not least, if you enjoy the bot consider buying me a drink at [jnferner.eth (0x74cc5Ee15E0D13Da72d459a8166e61897E4C308D)](https://etherscan.io/address/0x74cc5Ee15E0D13Da72d459a8166e61897E4C308D)";
+        for coin in self.coins {
+            let long_name = coin.long_name();
+            let command = format!("- {} _{}_\n", coin.short_name, long_name);
+            msg.push_str(&command)
+        }
+        msg.push_str(footer);
+        self.send_message(&msg)?;
+        Ok(())
+    }
+
+    fn handle_pair(&self, pair: &(Coin, Coin), exchange: &Exchange) -> Result<()> {
+        let ticker = exchange.ticker(pair)?;
+        let exchange_name = format!("*{}*", exchange.exchange_name());
+
+        let long_names = (pair.0.long_name(), pair.1.long_name());
+
+        let last_price = ticker.last_trade_price;
+        let mut price_amount = format!("{:.*}", 2, last_price);
+        if price_amount == "0.00" {
+            price_amount = format!("{:.*}", 6, last_price);
+        }
+        let price = format!(
+            "{} {}/{}",
+            price_amount,
+            pair.0.short_name.to_uppercase(),
+            pair.1.short_name.to_uppercase()
+        );
+
+        let percentage = ticker.daily_change_percentage;
+        let emoji = development_emoji(percentage);
+        let development = format!("{}{:.*}% in the last 24h", emoji, 2, percentage);
+
+        let msg = format!(
+            "{}\n{} - {}\n{}\n{}",
+            exchange_name, long_names.0, long_names.1, price, development
+        );
+        self.send_message(&msg)?;
+        Ok(())
     }
 }
 
@@ -156,72 +212,11 @@ fn parse_coin(coins: &[Coin], symbol: &str) -> Result<Coin> {
         .ok_or(Error::Parse(symbol.to_string()))
 }
 
-fn handle_help(coins: &Vec<Coin>, chat_id: i64, telegram: &TelegramApi) -> Result<()> {
-    let mut msg = "
-Simply use `/firstcoin_secondcoin`. If you only specify one coin, the bot assumes you want it in USD. Examples:
-
-`/eth` Returns the current Ethereum to U.S. Dollar rate
-`/eth_btc` Returns the current Ethereum to Bitcoin rate
-`/btc_chf` Returns the current Bitcoin to Swiss Franc rate
-
-Available currencies:
-"
-        .to_string();
-    let footer = "
-You can add a new currency yourself by adding it to the [coinfile](https://github.com/SirRade/rich-uncle-pennybags-bot/blob/master/Coins.toml)
-Please tell @Kekmeister if you want any additional features.
-
-If you're german speaking, feel free to [join us](https://t.me/joinchat/Azh980Rug594nvfzLEQsIw) 🙂
-Last but not least, if you enjoy the bot consider buying me a drink at [jnferner.eth (0x74cc5Ee15E0D13Da72d459a8166e61897E4C308D)](https://etherscan.io/address/0x74cc5Ee15E0D13Da72d459a8166e61897E4C308D)";
-    for coin in coins {
-        let long_name = coin.long_name();
-        let command = format!("- {} _{}_\n", coin.short_name, long_name);
-        msg.push_str(&command)
-    }
-    msg.push_str(footer);
-    telegram.send_message(chat_id, &msg)?;
-    Ok(())
-}
-
-fn handle_pair(
-    pair: &(Coin, Coin),
-    chat_id: i64,
-    telegram: &TelegramApi,
-    exchange: &Exchange,
-) -> Result<()> {
-    let ticker = exchange.ticker(pair)?;
-    let exchange_name = format!("*{}*", exchange.exchange_name());
-
-    let long_names = (pair.0.long_name(), pair.1.long_name());
-
-    let last_price = ticker.last_trade_price;
-    let mut price_amount = format!("{:.*}", 2, last_price);
-    if price_amount == "0.00" {
-        price_amount = format!("{:.*}", 6, last_price);
-    }
-    let price = format!(
-        "{} {}/{}",
-        price_amount,
-        pair.0.short_name.to_uppercase(),
-        pair.1.short_name.to_uppercase()
-    );
-
-    let percentage = ticker.daily_change_percentage;
-    let emoji = development_emoji(percentage);
-    let development = format!("{}{:.*}% in the last 24h", emoji, 2, percentage);
-
-    let msg = format!(
-        "{}\n{} - {}\n{}\n{}",
-        exchange_name, long_names.0, long_names.1, price, development
-    );
-    telegram.send_message(chat_id, &msg)?;
-    Ok(())
-}
-
 fn development_emoji(percentage: f32) -> &'static str {
     if percentage.is_sign_positive() {
         "📈 +"
     } else {
         "📉 "
     }
+}
 }
