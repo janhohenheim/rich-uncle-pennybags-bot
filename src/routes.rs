@@ -32,6 +32,7 @@ pub fn receive_update(
                 match command.as_ref() {
                     "help" => handle_help(&coins, chat_id, &telegram)?,
                     "ens" => command_handler.handle_ens()?,
+                    "hrb" => command_handler.handle_harbour()?,
                     _ => command_handler.handle_ticker()?,
                 }
             }
@@ -97,6 +98,16 @@ impl<'a> CommandHandler<'a> {
     }
     fn handle_ens(&self) -> Result<()> {
         self.send_message("[Ethereum Name Service](https://www.myetherwallet.com/#ens)")
+            .map(|_| ())
+    }
+
+    fn handle_harbour(&self) -> Result<()> {
+        let msg = 
+"🌍 The entire fucking world 👌😂👌
+Harbour - U.S. Dollar 🔥👌👌
+13376969420 HRB/USD 👌💯💯
+📈 +999999.45% in the last 24h😂💯";
+        self.send_message(msg)
             .map(|_| ())
     }
 }
