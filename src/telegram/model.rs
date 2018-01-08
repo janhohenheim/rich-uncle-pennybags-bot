@@ -17,7 +17,6 @@ pub struct Chat {
     pub id: i64,
 }
 
-
 #[derive(Deserialize)]
 pub struct Response<T> {
     pub ok: bool,

@@ -20,52 +20,22 @@ pub fn receive_update(
     if let Some(ref message) = update.message {
         if let Some(ref text) = telegram.extract_text(&message) {
             if text.starts_with('/') {
-                let text = &text[1..];
+                let command = &text[1..];
                 let chat_id = message.chat.id;
-                if text == "help" {
-                    if let Err(e) = handle_help(&coins, chat_id, &telegram) {
-                        println!("Failed to send help: {}", e);
-                    }
-                } else {
-                    let mut symbols: Vec<_> = text.split('_').collect();
-                    if symbols.len() == 1 {
-                        symbols.push("usd");
-                    }
-                    if symbols.len() == 2 {
-                        let first_coin = parse_coin(&coins, symbols[0]);
-                        if let Err(e) = first_coin {
-                            println!(
-                                "Failed to parse first coin: \"{}\", error: {}",
-                                symbols[0], e
-                            );
-                            return Ok(());
-                        }
-                        let first_coin = first_coin.unwrap();
-                        let second_coin = parse_coin(&coins, symbols[1]);
-                        if let Err(e) = second_coin {
-                            println!(
-                                "Failed to parse second coin: \"{}\", error: {}",
-                                symbols[1], e
-                            );
-                            return Ok(());
-                        }
-                        let second_coin = second_coin.unwrap();
-                        let pair = (first_coin, second_coin);
-                        let inverse = (pair.1.clone(), pair.0.clone());
-                        for exchange in exchanges.iter() {
-                            // try both combinations
-                            if handle_pair(&pair, chat_id, &telegram, exchange).is_err() {
-                                if let Err(err) =
-                                    handle_pair(&inverse, chat_id, &telegram, exchange)
-                                {
-                                    println!(
-                                        "Failed to answer to message: {}, error: {:?}",
-                                        text, err
-                                    );
-                                }
-                            }
+                let command_handler = CommandHandler {
+                    command,
+                    chat_id,
+                    coins: &coins,
+                    telegram: &telegram,
+                    exchanges: &exchanges,
+                };
+                match command {
+                    "help" => {
+                        if let Err(e) = handle_help(&coins, chat_id, &telegram) {
+                            println!("Failed to send help: {}", e);
                         }
                     }
+                    _ => command_handler.handle_ticker()?,
                 }
             }
         }
@@ -73,7 +43,53 @@ pub fn receive_update(
     Ok(())
 }
 
-fn parse_coin(coins: &Vec<Coin>, symbol: &str) -> Result<Coin> {
+struct CommandHandler<'a> {
+    command: &'a str,
+    chat_id: i64,
+    coins: &'a [Coin],
+    telegram: &'a TelegramApi,
+    exchanges: &'a Exchanges,
+}
+
+impl<'a> CommandHandler<'a> {
+    fn handle_ticker(&self) -> Result<()> {
+        let mut symbols: Vec<_> = self.command.split('_').collect();
+        if symbols.len() == 1 {
+            symbols.push("usd");
+        }
+        if symbols.len() == 2 {
+            let first_coin = parse_coin(self.coins, symbols[0]);
+            if let Err(e) = first_coin {
+                println!(
+                    "Failed to parse first coin: \"{}\", error: {}",
+                    symbols[0], e
+                );
+                return Ok(());
+            }
+            let first_coin = first_coin.unwrap();
+            let second_coin = parse_coin(self.coins, symbols[1]);
+            if let Err(e) = second_coin {
+                println!(
+                    "Failed to parse second coin: \"{}\", error: {}",
+                    symbols[1], e
+                );
+                return Ok(());
+            }
+            let second_coin = second_coin.unwrap();
+            let pair = (first_coin, second_coin);
+            let inverse = (pair.1.clone(), pair.0.clone());
+            for exchange in self.exchanges.iter() {
+                // try both combinations
+                if handle_pair(&pair, self.chat_id, self.telegram, exchange).is_err() {
+                    handle_pair(&inverse, self.chat_id, self.telegram, exchange)?
+                }
+            }
+        }
+        Ok(())
+    }
+}
+
+fn parse_coin(coins: &[Coin], symbol: &str) -> Result<Coin> {
     coins
         .iter()
         .find(|coin| coin.short_name == symbol)
