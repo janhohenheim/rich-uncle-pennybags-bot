@@ -1,12 +1,12 @@
 use rocket::State;
 use rocket_contrib::Json;
+use rand::{self, Rng};
 
 use telegram::Api as TelegramApi;
 use telegram::model::*;
 use exchange::Api as ExchangeApi;
 use model::Coin;
 use error::*;
-
 type Exchanges = Vec<Exchange>;
 type Exchange = Box<ExchangeApi + Send + Sync>;
 
@@ -102,12 +102,48 @@ impl<'a> CommandHandler<'a> {
     }
 
     fn handle_harbour(&self) -> Result<()> {
-        let msg = 
-"🌍 The entire fucking world 👌😂👌
-Harbour - U.S. Dollar 🔥👌👌
-13376969420 HRB/USD 👌💯💯
-📈 +999999.45% in the last 24h😂💯";
-        self.send_message(msg)
+        let mut rng = rand::thread_rng();
+        let mut price = String::new();
+        for _ in 0..3 {
+            let rand = rng.gen_range(0, 3);
+            let num = match rand {
+                0 => "69",
+                1 => "420",
+                2 => "1337",
+                _ => unreachable!()
+            };
+            price.push_str(num);
+        }
+        let gen_rand_emoji = || {
+            let mut rng = rand::thread_rng();
+            let mut emoji = String::new();
+            for _ in 0..3 {
+                let rand = rng.gen_range(0, 4);
+                let moji = match rand {
+                    0 => "👌",
+                    1 => "😂",
+                    2 => "🔥",
+                    3 => "💯",
+                    _ => unreachable!()
+                };
+                emoji.push_str(moji);
+            }
+            emoji
+        };
+
+        let msg = format!(
+"🌍 The entire fucking world {}
+Harbour - U.S. Dollar {}
+{} HRB/USD {}
+📈 +{:.*}% in the last 24h {}", 
+            gen_rand_emoji(), 
+            gen_rand_emoji(), 
+            price, 
+            gen_rand_emoji(), 
+            2, rng.gen_range(20.0, 9999999.99), 
+            gen_rand_emoji()
+        );
+        self.send_message(&msg)
             .map(|_| ())
     }
 }

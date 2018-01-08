@@ -9,6 +9,7 @@ extern crate serde;
 extern crate serde_derive;
 extern crate serde_json;
 extern crate toml;
+extern crate rand;
 
 mod exchange;
 mod telegram;
