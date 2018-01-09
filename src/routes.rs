@@ -138,9 +138,9 @@ impl<'a> CommandHandler<'a> {
 
         let msg = format!(
             "🌍 The entire fucking world {}
-Harbour - U.S. Dollar {}
-{} HRB/USD {}
-📈 +{:.*}% in the last 24h {}",
+            Harbour - U.S. Dollar {}
+            {} HRB/USD {}
+            📈 +{:.*}% in the last 24h {}",
             gen_rand_emoji(),
             gen_rand_emoji(),
             price,
@@ -154,20 +154,21 @@ Harbour - U.S. Dollar {}
 
     fn handle_help(&self) -> Result<()> {
         let mut msg = "
-    Simply use `/firstcoin_secondcoin`. If you only specify one coin, the bot assumes you want it in USD. Examples:
+            Simply use `/firstcoin_secondcoin`. If you only specify one coin, the bot assumes you want it in USD. Examples:  
 
-    `/eth` Returns the current Ethereum to U.S. Dollar rate
-    `/eth_btc` Returns the current Ethereum to Bitcoin rate
-    `/btc_chf` Returns the current Bitcoin to Swiss Franc rate
+            `/eth` Returns the current Ethereum to U.S. Dollar rate  
+            `/eth_btc` Returns the current Ethereum to Bitcoin rate  
+            `/btc_chf` Returns the current Bitcoin to Swiss Franc rate  
 
-    Available currencies:
-    ".to_string();
-        let footer = "
-    You can add a new currency yourself by adding it to the [coinfile](https://github.com/SirRade/rich-uncle-pennybags-bot/blob/master/Coins.toml)
-    Please tell @Kekmeister if you want any additional features.
+            Available currencies:
+            ".to_string();
+                let footer = "
+            Open sourced under the MIT license at [GitHub](https://github.com/SirRade/rich-uncle-pennybags-bot/).  
+            You can add a new currency yourself by adding it to the [coinfile](https://github.com/SirRade/rich-uncle-pennybags-bot/blob/master/Coins.toml).  
+            If you have a feature request, [open an issue on GitHub](https://github.com/SirRade/rich-uncle-pennybags-bot/issues/new) or tell @Kekmeister.  
 
-    If you're german speaking, feel free to [join us](https://t.me/joinchat/Azh980Rug594nvfzLEQsIw) 🙂
-    Last but not least, if you enjoy the bot consider buying me a drink at [jnferner.eth (0x74cc5Ee15E0D13Da72d459a8166e61897E4C308D)](https://etherscan.io/address/0x74cc5Ee15E0D13Da72d459a8166e61897E4C308D)";
+            If you're german speaking, feel free to [join us](https://t.me/joinchat/Azh980Rug594nvfzLEQsIw) 🙂  
+            Last but not least, if you enjoy the bot consider buying me a drink at [jnferner.eth (0x74cc5Ee15E0D13Da72d459a8166e61897E4C308D)](https://etherscan.io/address/0x74cc5Ee15E0D13Da72d459a8166e61897E4C308D)";
         for coin in self.coins {
             let long_name = coin.long_name();
             let command = format!("- {} _{}_\n", coin.short_name, long_name);
