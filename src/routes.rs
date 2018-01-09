@@ -137,9 +137,9 @@ impl<'a> CommandHandler<'a> {
         };
 
         let msg = format!(
-            "🌍 The entire fucking world {}
-            Harbour - U.S. Dollar {}
-            {} HRB/USD {}
+            "🌍 The entire fucking world {}\n\
+            Harbour - U.S. Dollar {}\n\
+            {} HRB/USD {}\n\
             📈 +{:.*}% in the last 24h {}",
             gen_rand_emoji(),
             gen_rand_emoji(),
@@ -154,20 +154,19 @@ impl<'a> CommandHandler<'a> {
 
     fn handle_help(&self) -> Result<()> {
         let mut msg = "
-            Simply use `/firstcoin_secondcoin`. If you only specify one coin, the bot assumes you want it in USD. Examples:  
-
-            `/eth` Returns the current Ethereum to U.S. Dollar rate  
-            `/eth_btc` Returns the current Ethereum to Bitcoin rate  
-            `/btc_chf` Returns the current Bitcoin to Swiss Franc rate  
-
-            Available currencies:
-            ".to_string();
+            Simply use `/firstcoin_secondcoin`. If you only specify one coin, the bot assumes you want it in USD. Examples:\n\
+            \n\
+            `/eth` Returns the current Ethereum to U.S. Dollar rate\n\
+            `/eth_btc` Returns the current Ethereum to Bitcoin rate\n\
+            `/btc_chf` Returns the current Bitcoin to Swiss Franc rate\n\
+            \n\
+            Available currencies:\n".to_string();
                 let footer = "
-            Open sourced under the MIT license at [GitHub](https://github.com/SirRade/rich-uncle-pennybags-bot/).  
-            You can add a new currency yourself by adding it to the [coinfile](https://github.com/SirRade/rich-uncle-pennybags-bot/blob/master/Coins.toml).  
-            If you have a feature request, [open an issue on GitHub](https://github.com/SirRade/rich-uncle-pennybags-bot/issues/new) or tell @Kekmeister.  
-
-            If you're german speaking, feel free to [join us](https://t.me/joinchat/Azh980Rug594nvfzLEQsIw) 🙂  
+            Open sourced under the MIT license at [GitHub](https://github.com/SirRade/rich-uncle-pennybags-bot/).\n\
+            You can add a new currency yourself by adding it to the [coinfile](https://github.com/SirRade/rich-uncle-pennybags-bot/blob/master/Coins.toml).\n\
+            If you have a feature request, [open an issue on GitHub](https://github.com/SirRade/rich-uncle-pennybags-bot/issues/new) or tell @Kekmeister.\n\
+            \n\
+            If you're german speaking, feel free to [join us](https://t.me/joinchat/Azh980Rug594nvfzLEQsIw) 🙂\n\
             Last but not least, if you enjoy the bot consider buying me a drink at [jnferner.eth (0x74cc5Ee15E0D13Da72d459a8166e61897E4C308D)](https://etherscan.io/address/0x74cc5Ee15E0D13Da72d459a8166e61897E4C308D)";
         for coin in self.coins {
             let long_name = coin.long_name();
