@@ -66,7 +66,7 @@ bat = "Basic Attention Token"
 xlm = "Stellar"
 sub = "Substratum"
 doge = "Dogecoin"
-nuls = "Nuls"
+nuls = "NULS"
 
 # Coins that need additional information
 [coins.xrb]
@@ -86,7 +86,7 @@ long_name = "Golem Network Token"
 coinmarketcap = "golem"
 
 [coins.qash]
-long_name = "Qash"
+long_name = "QASH"
 bitfinex = "QSH"
 
 [coins.eng]
@@ -99,7 +99,7 @@ bitfinex = "SPK"
 coinmarketcap = "spankchain"
 
 [coins.dnt]
-long_name = "District0x"
+long_name = "district0x"
 coinmarketcap = "0x"
 
 [coins.meme]
