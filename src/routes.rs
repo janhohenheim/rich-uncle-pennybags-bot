@@ -153,7 +153,7 @@ impl<'a> CommandHandler<'a> {
     }
 
     fn handle_help(&self) -> Result<()> {
-        let mut msg = "
+        let mut msg = "\
             Simply use `/firstcoin_secondcoin`. If you only specify one coin, the bot assumes you want it in USD. Examples:\n\
             \n\
             `/eth` Returns the current Ethereum to U.S. Dollar rate\n\
@@ -161,7 +161,7 @@ impl<'a> CommandHandler<'a> {
             `/btc_chf` Returns the current Bitcoin to Swiss Franc rate\n\
             \n\
             Available currencies:\n".to_string();
-                let footer = "
+                let footer = "\
             Open sourced under the MIT license at [GitHub](https://github.com/SirRade/rich-uncle-pennybags-bot/).\n\
             You can add a new currency yourself by adding it to the [coinfile](https://github.com/SirRade/rich-uncle-pennybags-bot/blob/master/Coins.toml).\n\
             If you have a feature request, [open an issue on GitHub](https://github.com/SirRade/rich-uncle-pennybags-bot/issues/new) or tell @Kekmeister.\n\
