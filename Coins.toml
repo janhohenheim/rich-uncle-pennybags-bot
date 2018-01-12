@@ -105,3 +105,8 @@ coinmarketcap = "0x"
 [coins.meme]
 long_name = "Memetic / PepeCoin"
 coinmarketcap = "memetic"
+
+[coins.rep]
+long_name = "Augur REPutation"
+coinmarketcap = "augur"
+
