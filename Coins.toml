@@ -71,6 +71,9 @@ dai = "Dai"
 rdn = "Raiden Network Token"
 prl = "Oyster Pearl"
 emc2 = "Einsteinium"
+sxc = "Sexcoin"
+tit = "Titcoin"
+
 
 # Coins that need additional information
 [coins.xrb]
@@ -120,4 +123,21 @@ coinmarketcap = "bitconnect"
 
 [coins.edt]
 long_name = "EtherDelta Token"
-coinmarketcap = "etherdelta-token"
+coinmarketcap = "Etherdelta Token"
+
+[coins.ttc]
+long_name = "TittieCoin"
+coinmarketcap = "Tittiecoin"
+
+[coins.cann]
+long_name = "CannabisCoin"
+coinmarketcap = "Cannabiscoin"
+
+
+[coins.ccn]
+long_name = "CannaCoin"
+coinmarketcap = "Cannacoin"
+
+[coins.thc]
+long_name = "HempCoin"
+coinmarketcap = "Hempcoin"
