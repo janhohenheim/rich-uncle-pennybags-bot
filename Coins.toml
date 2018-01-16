@@ -110,3 +110,6 @@ coinmarketcap = "memetic"
 long_name = "Augur REPutation"
 coinmarketcap = "augur"
 
+[coins.bcc]
+long_name = "BitConnect"
+coinmarketcap = "bitconnect"
