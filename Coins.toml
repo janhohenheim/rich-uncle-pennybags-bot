@@ -67,6 +67,7 @@ xlm = "Stellar"
 sub = "Substratum"
 doge = "Dogecoin"
 nuls = "NULS"
+dai = "Dai"
 
 # Coins that need additional information
 [coins.xrb]
