@@ -68,6 +68,7 @@ sub = "Substratum"
 doge = "Dogecoin"
 nuls = "NULS"
 dai = "Dai"
+rdn = "Raiden Network Token"
 
 # Coins that need additional information
 [coins.xrb]
