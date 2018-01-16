@@ -70,6 +70,7 @@ nuls = "NULS"
 dai = "Dai"
 rdn = "Raiden Network Token"
 prl = "Oyster Pearl"
+emc2 = "Einsteinium"
 
 # Coins that need additional information
 [coins.xrb]
