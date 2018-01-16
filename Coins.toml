@@ -116,3 +116,7 @@ coinmarketcap = "augur"
 [coins.bcc]
 long_name = "BitConnect"
 coinmarketcap = "bitconnect"
+
+[coins.edt]
+long_name = "EtherDelta Token"
+coinmarketcap = "etherdelta token"
