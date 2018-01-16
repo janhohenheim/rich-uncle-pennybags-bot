@@ -119,4 +119,4 @@ coinmarketcap = "bitconnect"
 
 [coins.edt]
 long_name = "EtherDelta Token"
-coinmarketcap = "etherdelta token"
+coinmarketcap = "etherdelta-token"
