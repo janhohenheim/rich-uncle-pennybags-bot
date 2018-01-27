@@ -74,6 +74,9 @@ emc2 = "Einsteinium"
 sxc = "Sexcoin"
 tit = "Titcoin"
 pepecash = "Pepe Cash"
+lsk = "Lisk"
+mod = "Modum"
+nebl = "Neblio"
 
 
 # Coins that need additional information
@@ -142,3 +145,7 @@ coinmarketcap = "Cannacoin"
 [coins.thc]
 long_name = "HempCoin"
 coinmarketcap = "Hempcoin"
+
+[coins.link]
+long_name = "ChainLink"
+coinmarketcap = "chainlink"
