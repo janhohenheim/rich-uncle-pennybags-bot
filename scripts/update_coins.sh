@@ -1,11 +1,19 @@
 #!/bin/bash
-BOTNAME=rich-uncle-pennybags-bot &&
-LOCATION=/opt/$BOTNAME/ &&
+set -e
 
-echo  -e "\033[33;36m Copying Coinfile to server... \033[0m" &&
-rsync -av  ./Coins.toml jnf:/opt/$BOTNAME/ &&
+BOTNAME=rich-uncle-pennybags-bot
+LOCATION=/opt/$BOTNAME/
 
-echo  -e "\033[33;36m Restarting services... \033[0m" &&
-ssh jnf service $BOTNAME restart &&
+tput setaf 4
+echo  -e "Copying Coinfile to server..."
+tput sgr0
+rsync -av  ./Coins.toml jnf:/opt/$BOTNAME/
 
-echo  -e "\033[33;32m Done deploying! \033[0m";
+tput setaf 4
+echo  -e "Restarting services..."
+tput sgr0
+ssh jnf service $BOTNAME restart
+
+tput setaf 2
+echo  -e "Done deploying!"
+tput sgr0
