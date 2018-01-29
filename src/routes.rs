@@ -21,7 +21,14 @@ pub fn receive_update(
         if let Some(ref text) = telegram.extract_text(&message) {
             if text.starts_with('/') {
                 let command = text[1..].to_lowercase();
+                println!("-------");
+                println!("command: {}", command);
                 let chat_id = message.chat.id;
+                println!("chat_id: {}", chat_id);
+                if let Some(ref user) = message.from {
+                    println!("from: {}", user.first_name);
+                }
+
                 let command_handler = CommandHandler {
                     command: &command,
                     chat_id,

@@ -10,6 +10,7 @@ pub struct Message {
     pub message_id: i64,
     pub chat: Chat,
     pub text: Option<String>,
+    pub from: Option<User>,
 }
 
 #[derive(Deserialize)]
@@ -23,4 +24,10 @@ pub struct Response<T> {
     pub error_code: Option<i32>,
     pub description: Option<String>,
     pub result: T,
+}
+
+#[derive(Deserialize)]
+pub struct User {
+    pub id: i64,
+    pub first_name: String,
 }

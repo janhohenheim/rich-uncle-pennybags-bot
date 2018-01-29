@@ -42,7 +42,7 @@ fn parse_coins(coinfile: &str) -> Vec<Coin> {
 
     let error_msg = format!(
         "
-Failed to parse coinfile at \"{}\". It either 
+Failed to parse coinfile at \"{}\". It either  
 - contains invalid TOML
 - a required key has been ommited
 - some key has not been recognized (Did you make a typo?)
