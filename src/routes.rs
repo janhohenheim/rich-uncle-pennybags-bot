@@ -28,6 +28,7 @@ pub fn receive_update(
                 if let Some(ref user) = message.from {
                     println!("from: {}", user.first_name);
                 }
+                println!("-------");
 
                 let command_handler = CommandHandler {
                     command: &command,
